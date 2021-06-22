@@ -12,6 +12,7 @@ public class Output2D : MonoBehaviour
     public Input2D input;
     public Status2D state;
     public Rigidbody2D body;
+    public Renderer2D _renderer;
 
     /* --- UNITY --- */
     void Start() { 
@@ -22,6 +23,7 @@ public class Output2D : MonoBehaviour
         Jump();
         Crouch();
         Damp();
+        Renderer();
     }
 
     /* --- METHODS --- */
@@ -50,6 +52,7 @@ public class Output2D : MonoBehaviour
         if (state.canCrouch && (input.crouch || state.stickyCrouch)) {
             if (doDebug) { print(debugTag + "Crouching"); }
             body.AddForce(new Vector2(0, -state.crouchForce));
+            body.velocity = new Vector2(body.velocity.x * 0.95f, body.velocity.y);
         } 
     }
 
@@ -57,5 +60,14 @@ public class Output2D : MonoBehaviour
         if (input.damp) {
             body.velocity = new Vector2(body.velocity.x * 0.95f, body.velocity.y);
         }
+    }
+
+    void Renderer() {
+        if (input.dash != 0) {
+            _renderer.transform.right = new Vector2(input.dash, 0);
+            _renderer.SetAnimation(_renderer.dashAnimation);
+            return;
+        }
+        _renderer.SetAnimation(null);
     }
 }
