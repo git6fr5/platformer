@@ -9,6 +9,7 @@ public class Input2D : MonoBehaviour
     [HideInInspector] public float dash;
     [HideInInspector] public bool jump;
     [HideInInspector] public bool crouch;
+    [HideInInspector] public bool damp;
 
     /* --- UNITY --- */
     void Start() { 

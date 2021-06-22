@@ -21,6 +21,7 @@ public class Output2D : MonoBehaviour
         Dash();
         Jump();
         Crouch();
+        Damp();
     }
 
     /* --- METHODS --- */
@@ -50,5 +51,11 @@ public class Output2D : MonoBehaviour
             if (doDebug) { print(debugTag + "Crouching"); }
             body.AddForce(new Vector2(0, -state.crouchForce));
         } 
+    }
+
+    void Damp() { 
+        if (input.damp) {
+            body.velocity = new Vector2(body.velocity.x * 0.95f, body.velocity.y);
+        }
     }
 }

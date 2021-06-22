@@ -22,5 +22,12 @@ public class Player2D : Input2D
         else {
             crouch = false;
         }
+        // dampening
+        if (Input.GetKey(KeyCode.LeftShift)) {
+            damp = true;
+        }
+        else {
+            damp = false;
+        }
     }
 }
