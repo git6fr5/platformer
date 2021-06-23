@@ -23,6 +23,10 @@ public class Container2D : MonoBehaviour
         Remove(collider);  
     }
 
+    void OnEnable() {
+        container = new List<Collider2D>();
+    }
+
     /* --- METHODS --- */
     void Add(Collider2D collider) {
         foreach (string containerTag in containerTags) {

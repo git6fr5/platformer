@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Platform
   - Traps
+  - NPC
+  - Path
   layers:
   - Default
   - TransparentFX
