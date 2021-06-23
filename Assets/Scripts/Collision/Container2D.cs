@@ -6,10 +6,10 @@ public class Container2D : MonoBehaviour
 {
     /* --- DEBUG --- */
     public bool doDebug = false;
-    string debugTag = "[Container2D]: ";
+    protected string debugTag = "[Container2D]: ";
 
     /* --- COMPONENTS ---*/
-    public string containerTag;
+    public string[] containerTags;
 
     /* --- VARIABLES --- */
     public List<Collider2D> container = new List<Collider2D>();
@@ -24,17 +24,30 @@ public class Container2D : MonoBehaviour
     }
 
     /* --- METHODS --- */
-    void Add(Collider2D collider) { 
-        if (!container.Contains(collider) && collider.tag == containerTag) {
-            if (doDebug) { print(debugTag + "Added " + collider.name); }
-            container.Add(collider);
-        }
+    void Add(Collider2D collider) {
+        foreach (string containerTag in containerTags) {
+            if (!container.Contains(collider) && collider.tag == containerTag) {
+                if (doDebug) { print(debugTag + "Added " + collider.name); }
+                container.Add(collider);
+                OnAdd(collider);
+            }
+        }  
     }
 
     void Remove(Collider2D collider) { 
         if (container.Contains(collider)) {
             if (doDebug) { print(debugTag + "Removed " + collider.name); }
             container.Remove(collider);
+            OnRemove(collider);
         }
+    }
+
+    /* --- VIRTUAL --- */
+    public virtual void OnAdd(Collider2D collider) { 
+        // on adding
+    }
+
+    public virtual void OnRemove(Collider2D collider) { 
+        // on adding
     }
 }

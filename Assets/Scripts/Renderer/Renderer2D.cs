@@ -5,10 +5,9 @@ using UnityEngine;
 public class Renderer2D : MonoBehaviour
 {
     /* --- COMPONENTS --- */
-    public Input2D input;
     public SpriteRenderer spriteRenderer;
     public Sprite defaultSprite;
-    public Animation2D dashAnimation;
+    public Material defaultMaterial;
 
     /* --- VARIABLES --- */
     public Animation2D currAnimation;
@@ -35,5 +34,13 @@ public class Renderer2D : MonoBehaviour
             return;
         }
         spriteRenderer.sprite = defaultSprite;
+    }
+
+    public void SetMaterial(Material _material) {
+        if (_material != null) { 
+            spriteRenderer.material = _material;
+            return;
+        }
+        spriteRenderer.material = defaultMaterial;
     }
 }

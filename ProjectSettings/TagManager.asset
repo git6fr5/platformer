@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - Platform
+  - Traps
   layers:
   - Default
   - TransparentFX
@@ -56,4 +57,7 @@ TagManager:
     locked: 0
   - name: Foreground
     uniqueID: 1237065625
+    locked: 0
+  - name: UI
+    uniqueID: 4245862273
     locked: 0

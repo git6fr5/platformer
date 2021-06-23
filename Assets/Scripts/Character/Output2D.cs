@@ -12,7 +12,7 @@ public class Output2D : MonoBehaviour
     public Input2D input;
     public Status2D state;
     public Rigidbody2D body;
-    public Renderer2D _renderer;
+    public Character2D character;
 
     /* --- UNITY --- */
     void Start() { 
@@ -27,7 +27,9 @@ public class Output2D : MonoBehaviour
     }
 
     /* --- METHODS --- */
-    void Dash() { 
+    void Dash() {
+        if (RightRoll()) { return; }
+        if (LeftRoll()) { return; }
         if (state.canDash && input.dash != 0) {
             if (doDebug) { print(debugTag + "Dashing"); }
             body.velocity = new Vector2(0, body.velocity.y);
@@ -36,7 +38,28 @@ public class Output2D : MonoBehaviour
         }
     }
 
+    bool RightRoll() {
+        if (state.canDash && input.rightRoll) {
+            if (doDebug) { print(debugTag + "Rolling"); }
+            body.AddForce(Vector2.right * 1000f);
+            input.rightRoll = false;
+            return true;
+        }
+        return false;
+    }
+
+    bool LeftRoll() {
+        if (state.canDash && input.leftRoll) {
+            if (doDebug) { print(debugTag + "Rolling"); }
+            body.AddForce(-Vector2.right * 1000f);
+            input.leftRoll = false;
+            return true;
+        }
+        return false;
+    }
+
     void Jump() {
+        if (DoubleJump()) { return; }
         if (state.canJump && input.jump) {
             if (doDebug) { print(debugTag + "Jumping"); }
             body.velocity = new Vector2(body.velocity.x, 0);
@@ -48,12 +71,35 @@ public class Output2D : MonoBehaviour
         else { body.gravityScale = 1f; }
     }
 
+    bool DoubleJump() { 
+        if (state.jumping && input.doubleJump) {
+            if (doDebug) { print(debugTag + "Double Jumping"); }
+            body.velocity = new Vector2(body.velocity.x, 0);
+            body.AddForce(new Vector2(0, state.jumpForce));
+            state.doubleJumping = true;
+            state.jumping = false;
+            return true;
+        }
+        return false;
+    }
+
     void Crouch() {
+        if (Slam()) { return; }
         if (state.canCrouch && (input.crouch || state.stickyCrouch)) {
             if (doDebug) { print(debugTag + "Crouching"); }
             body.AddForce(new Vector2(0, -state.crouchForce));
             body.velocity = new Vector2(body.velocity.x * 0.95f, body.velocity.y);
         } 
+    }
+
+    bool Slam() { 
+        if (state.canCrouch && input.slam) {
+            if (doDebug) { print(debugTag + "Rolling"); }
+            body.AddForce(Vector2.down * 1000f);
+            body.velocity = new Vector2(0f, body.velocity.y);
+            return true;
+        }
+        return false;
     }
 
     void Damp() { 
@@ -64,10 +110,17 @@ public class Output2D : MonoBehaviour
 
     void Renderer() {
         if (input.dash != 0) {
-            _renderer.transform.right = new Vector2(input.dash, 0);
-            _renderer.SetAnimation(_renderer.dashAnimation);
-            return;
+            character.transform.right = new Vector2(input.dash, 0);
+            character.SetAnimation(character.dashAnimation);
         }
-        _renderer.SetAnimation(null);
+        else {
+            character.SetAnimation(null);
+        }
+        if (state.justHurt) {
+            character.SetMaterial(character.hurtMaterial);
+        }
+        else {
+            character.SetMaterial(null);
+        }
     }
 }
