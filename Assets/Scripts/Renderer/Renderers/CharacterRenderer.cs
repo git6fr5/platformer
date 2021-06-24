@@ -16,7 +16,10 @@ public class CharacterRenderer : Renderer2D
     // particles
     [Space(5)][Header("Particles")]
     public ParticleRenderer quickDashParticle;
+    public ParticleRenderer jumpParticle;
+    public ParticleRenderer doubleJumpParticle;
+    public ParticleRenderer crouchParticle;
     // materials
-   [Space(5)][Header("Materials")]
+    [Space(5)][Header("Materials")]
     public Material hurtMaterial;
 }

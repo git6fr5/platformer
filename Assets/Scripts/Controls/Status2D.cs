@@ -53,7 +53,7 @@ public class Status2D : MonoBehaviour
     // crouching
     [Space(5)] [Header("Crouching")]
     public float crouchForce = 10f;
-    public bool canCrouch = true;
+    public bool crouching = false;
     public bool stickyCrouch = false;
 
 

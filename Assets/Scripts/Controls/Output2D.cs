@@ -30,6 +30,7 @@ public class Output2D : MonoBehaviour
         if (state.jumping && state.justJumped && input.jump) { DoubleJump(); }
         // crouching
         if (input.crouch || state.stickyCrouch) { Crouch(); }
+        else { state.crouching = false; }
         // attacking
         if (state.character.weapon != null && !state.character.weapon.attacking && input.attack) { Attack(); }
         // misc
@@ -47,12 +48,13 @@ public class Output2D : MonoBehaviour
 
     void QuickDash() {
         if (doDebug) { print(debugTag + "Quick Dashing"); }
-        state.character.characterRenderer.quickDashParticle.ActivateForDuration(state.quickDashBuffer);
+        state.character.characterRenderer.quickDashParticle?.Fire();
         state.quickDashing = true;
     }
 
     void Jump() {
         if (doDebug) { print(debugTag + "Jumping"); }
+        state.character.characterRenderer.jumpParticle?.Fire();
         body.velocity = new Vector2(body.velocity.x, 0);
         body.AddForce(new Vector2(0, state.jumpForce));
         state.justJumped = true;
@@ -60,6 +62,7 @@ public class Output2D : MonoBehaviour
 
     void DoubleJump() { 
         if (doDebug) { print(debugTag + "Double Jumping"); }
+        state.character.characterRenderer.doubleJumpParticle?.Fire();
         body.velocity = new Vector2(body.velocity.x, 0);
         body.AddForce(new Vector2(0, state.jumpForce));
         state.doubleJumping = true;
@@ -68,8 +71,10 @@ public class Output2D : MonoBehaviour
 
     void Crouch() {
         if (doDebug) { print(debugTag + "Crouching"); }
+        if (!state.crouching) { state.character.characterRenderer.crouchParticle?.Fire(); }
         body.AddForce(new Vector2(0, -state.crouchForce));
         body.velocity = new Vector2(body.velocity.x * 0.95f, body.velocity.y);
+        state.crouching = true;
     }
 
     void Attack() {
