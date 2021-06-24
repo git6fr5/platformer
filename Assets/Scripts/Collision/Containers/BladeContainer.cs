@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class BladeContainer : Container2D
 {
+
     /* --- VARIABLES --- */
     public Weapon2D weapon;
     public Collider2D blade;
@@ -23,6 +24,6 @@ public class BladeContainer : Container2D
         if (collider.GetComponent<HitboxContainer>() == null) { return; }
         HitboxContainer hitbox = collider.GetComponent<HitboxContainer>();
         hitbox.Hurt(weapon.attackDamage);
-        hitbox.Knockback(weapon.knockbackForce, collider.transform.position - weapon.hand.position);
+        hitbox.Knockback(weapon.knockbackForce, collider.transform.position - weapon.hand.transform.position);
     }
 }

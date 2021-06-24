@@ -6,11 +6,12 @@ public class PlayerInput : Input2D
 {
     /* --- VARIABLES --- */
     public float doubleTapBuffer = 0.2f;
-    public string rightDashKey;
-    public string leftDashKey;
-    public string jumpKey;
-    public string crouchKey;
-    public int attackButton;
+    public KeyCode rightDashKey = KeyCode.D;
+    public KeyCode leftDashKey = KeyCode.A;
+    public KeyCode quickDashKey = KeyCode.LeftShift;
+    public KeyCode jumpKey = KeyCode.W;
+    public KeyCode crouchKey = KeyCode.S;
+    public int attackButton = 0;
 
     /* --- OVERRIDE --- */
     public override void GetInput() {
@@ -18,6 +19,8 @@ public class PlayerInput : Input2D
         if (Input.GetKey(rightDashKey)) { dash = 1; }
         else if (Input.GetKey(leftDashKey)) { dash = -1; }
         else { dash = 0; }
+        if (Input.GetKeyDown(quickDashKey)) { quickDash = true; }
+        else { quickDash = false; }
         // jumping 
         if (Input.GetKeyDown(jumpKey)) { jump = true; }
         else { jump = false; }
@@ -25,7 +28,10 @@ public class PlayerInput : Input2D
         if (Input.GetKey(crouchKey)) { crouch = true; }
         else { crouch = false; }
         // attacking
-        if (Input.GetMouseButtonDown(attackButton)) { attack = true; }
+        if (Input.GetMouseButtonDown(attackButton)) { 
+            attack = true; 
+            targetPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        }
         else { attack = false; }
     }
 }

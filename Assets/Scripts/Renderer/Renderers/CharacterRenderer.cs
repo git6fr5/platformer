@@ -6,6 +6,7 @@ public class CharacterRenderer : Renderer2D
 {
     /* --- VARIABLES --- */
     // animations
+    [Space(5)][Header("Animations")]
     public Animation2D idleAnimation;
     public Animation2D dashAnimation;
     public Animation2D jumpAnimation;
@@ -13,5 +14,6 @@ public class CharacterRenderer : Renderer2D
     public Animation2D rollAnimation;
     public Animation2D hangAnimation;
     // materials
+   [Space(5)][Header("Materials")]
     public Material hurtMaterial;
 }

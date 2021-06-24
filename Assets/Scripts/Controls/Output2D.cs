@@ -13,8 +13,6 @@ public class Output2D : MonoBehaviour
     public Input2D input;
     public Status2D state;
     public Rigidbody2D body;
-    public Weapon2D weapon;
-    public CharacterRenderer character;
 
     /* --- VARIABLES --- */
     public bool damp = true;
@@ -24,11 +22,17 @@ public class Output2D : MonoBehaviour
     }
 
     void Update() {
+        // dashing
         if (!state.justDashed && input.dash != 0) { Dash(); }
+        if (!state.quickDashing && input.quickDash) { QuickDash(); }
+        // jumping
         if (state.onGround && !state.justJumped && input.jump) { Jump(); }
         if (state.jumping && state.justJumped && input.jump) { DoubleJump(); }
+        // crouching
         if (input.crouch || state.stickyCrouch) { Crouch(); }
-        if (weapon != null && !weapon.attacking && input.attack) { Attack(); }
+        // attacking
+        if (state.character.weapon != null && !state.character.weapon.attacking && input.attack) { Attack(); }
+        // misc
         if (damp) { Damp(); }
         Renderer();
     }
@@ -37,8 +41,13 @@ public class Output2D : MonoBehaviour
     void Dash() {    
         if (doDebug) { print(debugTag + "Dashing"); }
         body.velocity = new Vector2(0, body.velocity.y);
-        body.AddForce(new Vector2(input.dash * state.dashForce, 0));
+        body.AddForce(new Vector2(input.dash * state.dashForce * state.dashMultiplier, 0));
         state.justDashed = true;
+    }
+
+    void QuickDash() {
+        if (doDebug) { print(debugTag + "Quick Dashing"); }
+        state.quickDashing = true;
     }
 
     void Jump() {
@@ -64,7 +73,7 @@ public class Output2D : MonoBehaviour
 
     void Attack() {
         if (doDebug) { print(debugTag + "Attacking"); }
-        weapon.Activate();
+        state.character.weapon.Activate(input.targetPoint);
     }
 
     void Damp() { 
@@ -76,17 +85,17 @@ public class Output2D : MonoBehaviour
 
     void Renderer() {
         if (input.dash != 0) {
-            character.transform.right = new Vector2(input.dash, 0);
-            character.SetAnimation(character.dashAnimation);
+            state.character.transform.right = new Vector2(input.dash, 0);
+            state.character.characterRenderer.SetAnimation(state.character.characterRenderer.dashAnimation);
         }
         else {
-            character.SetAnimation(null);
+            state.character.characterRenderer.SetAnimation(null);
         }
         if (state.justHurt) {
-            character.SetMaterial(character.hurtMaterial);
+            state.character.characterRenderer.SetMaterial(state.character.characterRenderer.hurtMaterial);
         }
         else {
-            character.SetMaterial(null);
+            state.character.characterRenderer.SetMaterial(null);
         }
     }
 }

@@ -8,8 +8,7 @@ public class Status2D : MonoBehaviour
 {
     /* --- COMPONENTS --- */
     public Rigidbody2D body;
-    public Collider2D hitBox;
-    public Container2D groundContainer;
+    public Character2D character;
     public Slider healthSlider;
 
     /* --- VARIABLES --- */
@@ -30,10 +29,16 @@ public class Status2D : MonoBehaviour
     // dashing
     [Space(5)] [Header("Dash")]
     [Range(50f, 1000f)] public float dashForce = 100f;
+    [Range(1.15f, 3f)] public float dashMultiplier = 1f;
+    [Range(1.15f, 3f)] public float defaultDashMultiplier = 1f;
+    [Range(1.15f, 3f)] public float quickDashMultiplier = 2f;
     public bool dashing = false;
+    public bool quickDashing = false;
     public bool justDashed = false;
     public Coroutine dashReset = null;
+    public Coroutine quickDashReset = null;
     [Range(0.05f, 0.25f)] public float dashBuffer = 0.05f;
+    [Range(0.05f, 0.75f)] public float quickDashBuffer = 0.25f;
     // jumping
     [Space(5)] [Header("Jumping")]
     [Range(50f, 1000f)] public float jumpForce = 100f;
@@ -92,6 +97,10 @@ public class Status2D : MonoBehaviour
             dashing = true;
             dashReset = StartCoroutine(IEDashReset(dashBuffer));
         }
+        if (quickDashing && quickDashReset == null) {
+            dashMultiplier = quickDashMultiplier;
+            quickDashReset = StartCoroutine(IEQuickDashReset(quickDashBuffer)); 
+        }
     }
 
     void JumpFlag() {
@@ -113,7 +122,7 @@ public class Status2D : MonoBehaviour
     }
 
     void GroundFlag() { 
-        if (groundContainer.container.Count > 0) {
+        if (character.groundCheck.container.Count > 0) {
             onGround = true;
         }
         else {
@@ -147,6 +156,14 @@ public class Status2D : MonoBehaviour
         yield return new WaitForSeconds(delay);
         justDashed = false;
         dashReset = null;
+        yield return null;
+    }
+
+    IEnumerator IEQuickDashReset(float delay) {
+        yield return new WaitForSeconds(delay);
+        dashMultiplier = defaultDashMultiplier;
+        quickDashing = false;
+        quickDashReset = null;
         yield return null;
     }
 }

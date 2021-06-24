@@ -13,6 +13,7 @@ public class Container2D : MonoBehaviour
 
     /* --- VARIABLES --- */
     public List<Collider2D> container = new List<Collider2D>();
+    public bool stickyContainer = false;
 
     /* --- UNITY --- */
     void OnTriggerEnter2D(Collider2D collider) {
@@ -39,6 +40,7 @@ public class Container2D : MonoBehaviour
     }
 
     void Remove(Collider2D collider) { 
+        if (stickyContainer) { return; }
         if (container.Contains(collider)) {
             if (doDebug) { print(debugTag + "Removed " + collider.name); }
             container.Remove(collider);

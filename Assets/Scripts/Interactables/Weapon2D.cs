@@ -6,7 +6,7 @@ public class Weapon2D : MonoBehaviour
 {
 
     /* --- COMPONENTS --- */
-    public Transform hand;
+    public Rigidbody2D hand;
 
     /* --- VARIABELS ---*/
     // properties
@@ -26,6 +26,7 @@ public class Weapon2D : MonoBehaviour
     public bool swinging = false;
     public bool resetting = false;
     // placeholders
+    protected Vector2 targetPoint;
     private Vector3 originalPosition;
     private Quaternion originalRotation;
 
@@ -35,11 +36,13 @@ public class Weapon2D : MonoBehaviour
 
     void Update() {  
         if (attacking) { Attack(); }
+        if (!attacking) { Idle(); }
     }
 
     /* --- METHODS --- */
-    public void Activate() {
+    public void Activate(Vector2 _targetPoint) {
         StartCoroutine(IEStartAttack());
+        targetPoint = _targetPoint;
     }
 
     /* --- VIRTUAL --- */
@@ -47,11 +50,16 @@ public class Weapon2D : MonoBehaviour
         // do attack
     }
 
+    public virtual void Idle() {
+        // be idle
+    }
+
     /* --- COROUTINES --- */
     IEnumerator IEStartAttack() {
         originalPosition = hand.transform.localPosition;
         originalRotation = hand.transform.localRotation;
         attacking = true;
+        startingAttack = true;
         backSwinging = true;    
         yield return StartCoroutine(IEBackSwing(backSwingTime));
     }
