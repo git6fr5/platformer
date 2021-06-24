@@ -23,7 +23,7 @@ public class Melee : Weapon2D
     }
 
     void BackSwing() {
-        hand.transform.localPosition = hand.transform.localPosition - Vector3.right * 0.5f * Time.deltaTime / backSwingTime; 
+        //hand.transform.localPosition = hand.transform.localPosition - Vector3.right * 0.5f * Time.deltaTime / backSwingTime; 
     }
 
     void Swing() { 

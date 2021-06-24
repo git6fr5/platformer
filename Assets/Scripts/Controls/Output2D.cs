@@ -47,6 +47,7 @@ public class Output2D : MonoBehaviour
 
     void QuickDash() {
         if (doDebug) { print(debugTag + "Quick Dashing"); }
+        state.character.characterRenderer.quickDashParticle.ActivateForDuration(state.quickDashBuffer);
         state.quickDashing = true;
     }
 

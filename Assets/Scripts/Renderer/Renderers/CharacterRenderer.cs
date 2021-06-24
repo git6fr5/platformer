@@ -13,6 +13,9 @@ public class CharacterRenderer : Renderer2D
     public Animation2D crouchAnimation;
     public Animation2D rollAnimation;
     public Animation2D hangAnimation;
+    // particles
+    [Space(5)][Header("Particles")]
+    public ParticleRenderer quickDashParticle;
     // materials
    [Space(5)][Header("Materials")]
     public Material hurtMaterial;

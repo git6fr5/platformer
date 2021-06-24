@@ -10,6 +10,11 @@ public class ParticleRenderer : Renderer2D
         StartCoroutine(IEDeactivate(currAnimation.frames.Length / currAnimation.frameRate));
     }
 
+    public void ActivateForDuration(float duration) {
+        Activate();
+        StartCoroutine(IEDeactivate(duration));
+    }
+
     public void Activate() {
         currAnimation.Play();
         render = true;
