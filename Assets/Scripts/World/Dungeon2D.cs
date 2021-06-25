@@ -19,26 +19,11 @@ public class Dungeon2D : MonoBehaviour
     [Space(5)][Header("Displays")]
     public Text textBox;
     public Tilemap tilemap;
-    // tiles
+    // layouts
     [Space(5)][Header("Tiles")]
-    public TileBase[] tileArray;
-    public TileBase empty; // 0 
-    public TileBase center; // 1 => 0000, no empties ^^ need to swap empty and center around
-    public TileBase rightEdge; // 2 => 0001, 1 right empty
-    public TileBase ceiling; // 3 => 0010, 2 bottom empty
-    public TileBase ceilingRightCorner; // 4 => 0011, 3 bottom + right empty
-    public TileBase leftEdge; // 5 => 0100, 4 left empty
-    public TileBase centerSpike; // 6 => 0101, 5 left + right empty
-    public TileBase ceilingLeftCorner; // 7 => 0110, 6 left + bottom empty
-    public TileBase ceilingSpike; // 8 => 0111, 7 left + bottom + right empty
-    public TileBase floor; // 9 => 1000, 8 top empty
-    public TileBase floorRightEdge; // 10 => 1001, 9 top + right empty
-    public TileBase platformCenter; // 11 => 1010, 10 top + bottom empty
-    public TileBase platformRightEdge; // 12 => 1011, 11 top + bottom + right empty
-    public TileBase floorLeftEdge; // 13 => 1100, 12 top + left empty
-    public TileBase floorSpike; // 14 => 1101, 13 top + left + right empty
-    public TileBase platformLeftEdge; // 15 => 1110, 14 top + left + bottom empty
-    public TileBase hangingBlock; // 16 => 1111, 15 top + left + bottom + right empty
+    public Layout2D[] layouts;
+    public float[] layoutDistribution;
+    private float distributionSum = 0f;
 
     /* --- VARIABLES --- */
     // grid dimensions 
@@ -62,31 +47,14 @@ public class Dungeon2D : MonoBehaviour
 
     /* --- INITIALIZERS --- */
     public void Initialize() {
-        InitializeTileArray();
+        foreach (Layout2D layout in layouts) {
+            layout.InitializeTileArray();
+        };
+        foreach (float num in layoutDistribution) {
+            distributionSum += num;
+        }
         InitializeGrid();
         InitializeTileMap();
-    }
-
-    // initialize the tile array
-    void InitializeTileArray() {
-        tileArray = new TileBase[17];
-        tileArray[0] = empty; 
-        tileArray[1] = center; // 1 => 0000, 0 no empties ^^ need to swap empty and center around
-        tileArray[2] = rightEdge; // 2 => 0001, 1 right empty
-        tileArray[3] = ceiling; // 3 => 0010, 2 bottom empty
-        tileArray[4] = ceilingRightCorner; // 4 => 0011, 3 bottom + right empty
-        tileArray[5] = leftEdge; // 5 => 0100, 4 left empty
-        tileArray[6] = centerSpike; // 6 => 0101, 5 left + right empty
-        tileArray[7] = ceilingLeftCorner; // 7 => 0110, 6 left + bottom empty
-        tileArray[8] = ceilingSpike; // 8 => 0111, 7 left + bottom + right empty
-        tileArray[9] = floor; // 9 => 1000, 8 top empty
-        tileArray[10] = floorRightEdge; // 10 => 1001, 9 top + right empty
-        tileArray[11] = platformCenter; // 11 => 1010, 10 top + bottom empty
-        tileArray[12] = platformRightEdge; // 12 => 1011, 11 top + bottom + right empty
-        tileArray[13] = floorLeftEdge; // 13 => 1100, 12 top + left empty
-        tileArray[14] = floorSpike; // 14 => 1101, 13 top + left + right empty
-        tileArray[15] = platformLeftEdge; // 15 => 1110, 14 top + left + bottom empty
-        tileArray[16] = hangingBlock; // 16 => 1111, 15 top + left + bottom + right empty
     }
 
     // initialize a grid
@@ -129,10 +97,11 @@ public class Dungeon2D : MonoBehaviour
     }
 
     // prints out a grid cell to a tile
-    void SetTile(int i, int j) {
-        if (grid[i][j] > tileArray.Length) { return; }
+    public void SetTile(int i, int j) {
+        if (grid[i][j] > Layout2D.layoutSize) { return; }
         Vector3Int tilePosition = GridToTileMap(i, j);
-        TileBase tileBase = tileArray[grid[i][j]];
+        Layout2D layout = RandomLayout();
+        TileBase tileBase = layout.tileArray[grid[i][j]];
         tilemap.SetTile(tilePosition, tileBase);
         if (grid[i][j] == 0) {
             tilemap.SetTile(tilePosition, null);
@@ -147,7 +116,7 @@ public class Dungeon2D : MonoBehaviour
         }
     }
 
-    void CleanCell(int i, int j) {
+    public void CleanCell(int i, int j) {
         // check only the non-empty tiles
         int code = 1; // starting from one to account for the 0th null tile
         if (grid[i][j] != (int)Tiles.empty) {
@@ -220,6 +189,12 @@ public class Dungeon2D : MonoBehaviour
         return new int[] { gridY, gridX };
     }
 
+    public int[] PointToGrid(Vector2 point) {
+        int gridY = grid.Length - (int)(point.y + vertOffset);
+        int gridX = (int)(point.x + horOffset);
+        return new int[] { gridY, gridX };
+    }
+
     // checks if a coordinate is in the grid
     public bool PointInGrid(int[] point) {
         return (point[1] < sizeHorizontal && point[1] > 0 && point[0] < sizeVertical && point[0] > 0);
@@ -246,5 +221,19 @@ public class Dungeon2D : MonoBehaviour
     public Anchor2D RandomAnchor()
     {
         return new Anchor2D(Random.Range(0.05f, 0.95f), Random.Range(0.05f, 0.95f));
+    }
+
+    public Layout2D RandomLayout() {
+        float prob = Random.Range(0f, distributionSum);
+        float distribution = 0f;
+        for (int i = 0; i < layoutDistribution.Length; i++)
+        {
+            distribution += layoutDistribution[i];
+            if (prob < distribution)
+            {
+                return layouts[i];
+            }
+        }
+        return layouts[0];
     }
 }

@@ -13,6 +13,7 @@ public class PlayerInput : Input2D
     public KeyCode crouchKey = KeyCode.LeftShift;
     public KeyCode quickDashKey = KeyCode.Space;
     public int attackButton = 0;
+    public int secondaryAttackButton = 1;
 
     /* --- OVERRIDE --- */
     public override void GetInput() {
@@ -35,8 +36,12 @@ public class PlayerInput : Input2D
         // attacking
         if (Input.GetMouseButtonDown(attackButton)) { 
             attack = true; 
-            targetPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         }
         else { attack = false; }
+        if (Input.GetMouseButtonDown(secondaryAttackButton)) { 
+            attack2 = true; 
+        }
+        else { attack2 = false; }
+        targetPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
     }
 }

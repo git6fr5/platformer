@@ -35,6 +35,7 @@ public class Output2D : MonoBehaviour
         if (input.slam) { Slam(); }
         // attacking
         if (state.character.weapon != null && !state.character.weapon.attacking && input.attack) { Attack(); }
+        if (state.character.secondaryWeapon != null && !state.character.secondaryWeapon.attacking && input.attack2) { SecondaryAttack(); }
         // misc
         if (damp) { Damp(); }
         Renderer();
@@ -95,6 +96,11 @@ public class Output2D : MonoBehaviour
         state.character.weapon.Activate(input.targetPoint);
     }
 
+    void SecondaryAttack() {
+        if (doDebug) { print(debugTag + "Secondary Attack"); }
+        state.character.secondaryWeapon.Activate(input.targetPoint);
+    }
+
     void Damp() { 
         body.velocity = new Vector2(body.velocity.x * 0.999f, body.velocity.y);
         if (body.velocity.y > 20f){
@@ -103,10 +109,18 @@ public class Output2D : MonoBehaviour
     }
 
     void Renderer() {
+
+        Vector2 dir = input.targetPoint - (Vector2)transform.position;
+        if (dir.x < 0.01f) {
+            state.character.transform.right = Vector2.left;
+        }
+        else if (dir.x > 0.01f) {
+            state.character.transform.right = Vector2.right;
+        }
         if (input.dash != 0) {
-            state.character.transform.right = new Vector2(input.dash, 0);
             state.character.characterRenderer.SetAnimation(state.character.characterRenderer.dashAnimation);
         }
+        //float angle = 3 * Mathf.Round(Mathf.Atan(dir.y / dir.x) * 180f / Mathf.PI / 3);
         else {
             state.character.characterRenderer.SetAnimation(null);
         }

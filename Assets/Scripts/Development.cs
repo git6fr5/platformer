@@ -12,6 +12,7 @@ public class Development : MonoBehaviour
     public FollowContainer cameraContainer;
     public List<Character2D> characters;
     public Dungeon2D dungeon;
+    public Background2D background;
 
     /* --- VARIABLES --- */
     public int characterIndex;
@@ -24,8 +25,11 @@ public class Development : MonoBehaviour
     void Start() {
         SetPlayer(characters[characterIndex]);
         dungeon.Initialize();
+        background.Initialize();
         if (buildMode) { BuildMode(); }
         else {
+            background.RandomizeGrid();
+            background.SetTilemap();
             for (int i = 0; i < dungeon.density; i++) {
                 dungeon.AddShape(Geometry2D.Shape.ellipse, dungeon.RandomAnchor());
             }
@@ -105,6 +109,10 @@ public class Development : MonoBehaviour
             if (printGrid) { dungeon.PrintGrid(); }
             if (cleanGrid) { dungeon.CleanGrid(); }
             dungeon.SetTilemap();
+        }
+        if (Input.GetKeyDown(KeyCode.Space)) {
+            background.RandomizeGrid();
+            background.SetTilemap();
         }
     }
 

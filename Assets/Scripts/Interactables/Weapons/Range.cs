@@ -4,11 +4,9 @@ using UnityEngine;
 
 public class Range : Weapon2D
 {
-
-    public Transform handParent;
-    [Range(0f, 50f)] public float throwSpeed = 25f;
-    [Range(0f, 50f)] public float throwSpin = 5f;
-    float spinDirection;
+    public Transform firePoint;
+    public GameObject bulletPrefab;
+    public float bulletSpeed = 40f;
 
     public override void Attack()
     {
@@ -20,14 +18,16 @@ public class Range : Weapon2D
 
     public override void Idle()
     {
+        
     }
+
 
     void StartAttack()
     {
-        hand.simulated = true;
-        hand.transform.parent = null;
-        hand.velocity = hand.transform.right.normalized * throwSpeed;// (targetPoint - (Vector2)hand.transform.position).normalized * throwSpeed;
-        spinDirection = -Mathf.Sign(hand.transform.right.x);
+        // The bullet
+        BulletContainer bullet = Instantiate(bulletPrefab, firePoint.position, Quaternion.identity, null).GetComponent<BulletContainer>();
+        bullet.gameObject.SetActive(true);
+        bullet.body.velocity = -(transform.position - (Vector3)targetPoint).normalized * bulletSpeed;
         startingAttack = false;
     }
 
@@ -37,13 +37,9 @@ public class Range : Weapon2D
 
     void Swing()
     {
-        hand.transform.RotateAround(hand.transform.position, Vector3.forward, spinDirection * throwSpin);
     }
 
     void Reset()
     {
-        hand.velocity = Vector2.zero;
-        hand.simulated = false;
-        hand.transform.parent = handParent;
     }
 }

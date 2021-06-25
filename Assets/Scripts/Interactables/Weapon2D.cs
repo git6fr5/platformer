@@ -11,6 +11,7 @@ public class Weapon2D : MonoBehaviour
     /* --- VARIABELS ---*/
     // properties
     public bool isEquipped = false;
+    public bool point = false;
     // stats
     [Space(5)] [Header("Stats")]
     public int attackDamage = 5;

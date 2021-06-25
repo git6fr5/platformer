@@ -16,6 +16,7 @@ public class Input2D : MonoBehaviour
     public bool slam;
     public bool crouch;
     public bool attack;
+    public bool attack2;
     public Vector2 targetPoint;
 
     /* --- UNITY --- */

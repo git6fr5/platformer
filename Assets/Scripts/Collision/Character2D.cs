@@ -18,4 +18,5 @@ public class Character2D : MonoBehaviour
     // equipment
     [Space(5)][Header("Equipment")]
     public Weapon2D weapon;
+    public Weapon2D secondaryWeapon;
 }
