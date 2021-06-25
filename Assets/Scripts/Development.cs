@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class Development : MonoBehaviour
 {
+    /* --- ENUMS --- */
+    public enum Physics { Earth, Mars }
+
     /* --- COMPONENTS --- */
     public Status2D playerState;
     public FollowContainer cameraContainer;
@@ -13,6 +16,9 @@ public class Development : MonoBehaviour
     /* --- VARIABLES --- */
     public int characterIndex;
     public bool buildMode = true;
+    public bool printGrid = true;
+    public bool cleanGrid = true;
+    public Physics physics = Physics.Earth;
 
     /* --- METHODS --- */
     void Start() {
@@ -23,7 +29,8 @@ public class Development : MonoBehaviour
             for (int i = 0; i < dungeon.density; i++) {
                 dungeon.AddShape(Geometry2D.Shape.ellipse, dungeon.RandomAnchor());
             }
-            dungeon.CleanGrid();
+            if (printGrid) { dungeon.PrintGrid(); }
+            if (cleanGrid) { dungeon.CleanGrid(); }
             dungeon.SetTilemap();
         }
     }
@@ -40,6 +47,7 @@ public class Development : MonoBehaviour
         if (buildMode) {
             BuildModeCommands();
         }
+        PhysicsSettings();
     }
 
     /* --- METHODS --- */
@@ -79,8 +87,8 @@ public class Development : MonoBehaviour
             else {
                 dungeon.AddPoint();
             }
-            //dungeon.PrintGrid();
-            dungeon.CleanGrid();
+            if (printGrid) { dungeon.PrintGrid(); }
+            if (cleanGrid) { dungeon.CleanGrid(); }
             dungeon.SetTilemap();
         }
         if (Input.GetMouseButtonDown(1)) {
@@ -94,9 +102,20 @@ public class Development : MonoBehaviour
                     dungeon.AddShape(Geometry2D.Shape.triangle, dungeon.RandomAnchor());
                 }
             }
-            //dungeon.PrintGrid();
-            dungeon.CleanGrid();
+            if (printGrid) { dungeon.PrintGrid(); }
+            if (cleanGrid) { dungeon.CleanGrid(); }
             dungeon.SetTilemap();
+        }
+    }
+
+    void PhysicsSettings() {
+        if (physics == Physics.Earth) {
+            playerState.defaultGravity = 10f;
+            playerState.jumpGravity = 3f;
+        }
+        else if (physics == Physics.Mars) {
+            playerState.defaultGravity = 5f;
+            playerState.jumpGravity = 2f;
         }
     }
 

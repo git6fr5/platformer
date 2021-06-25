@@ -9,6 +9,10 @@ public class Geometry2D
         ellipse, triangle
     }
 
+    /* --- VARIABLES --- */
+    public static int background = 1;
+    public static int fill = 0;
+
     /* --- METHODS --- */
     // constructs the given shape
     public static int[][] ConstructShape(Shape shape, int vertical, int horizontal) {
@@ -31,6 +35,9 @@ public class Geometry2D
         int[][] ellipse = new int[vertical][];
         for (int i = 0; i < ellipse.Length; i++) {
             ellipse[i] = new int[horizontal];
+            for (int j = 0; j < ellipse[i].Length; j++) {
+                ellipse[i][j] = background;
+            }
         }
         // the major and minor axis radii
         float a = (float)horizontal / 2;
@@ -41,7 +48,7 @@ public class Geometry2D
                 float x = (float)j - a;
                 float y = (float)i - b;
                 float ellipticalBoundary = (x * x / (a * a)) + (y * y / (b * b));
-                if (Mathf.Abs(ellipticalBoundary) < 1) { ellipse[i][j] = 1; }
+                if (Mathf.Abs(ellipticalBoundary) < 1) { ellipse[i][j] = fill; }
             }
         }
         return ellipse;
@@ -54,6 +61,9 @@ public class Geometry2D
         int[][] triangle = new int[vertical][];
         for (int i = 0; i < triangle.Length; i++) {
             triangle[i] = new int[horizontal];
+            for (int j = 0; j < triangle[i].Length; j++) {
+                triangle[i][j] = background;
+            }
         }
         // the side lengths
         float center = (int)(horizontal / 3);
@@ -63,7 +73,7 @@ public class Geometry2D
         for (int i = 0; i < vertical; i++) {
             for (int j = 0; j < horizontal; j++) {
                 if (j < center && (vertical - i) < ratioA * j) { triangle[i][j] = 1; }
-                if (j >= center && i > ratioB * j + center) { triangle[i][j] = 1; }
+                if (j >= center && i > ratioB * j + center) { triangle[i][j] = fill; }
             }
         }      
         return triangle;

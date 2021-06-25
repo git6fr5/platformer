@@ -8,10 +8,12 @@ using UnityEngine.Events;
 public class Dungeon2D : MonoBehaviour
 {
     /* --- ENUMS --- */
-    public enum Tiles { center, empty, leftWall, rightWall, floor, ceiling,
-                        floorRight, floorLeft, floorSpike,
-                        ceilingLeft, ceilingRight, ceilingSpike,
-                        leftWallSpike, rightWallSpike };
+    public enum Tiles { empty, center, 
+                        rightEdge, 
+                        ceiling, ceilingRightCorner,
+                        leftEdge, centerSpike, ceilingLeftCorner, ceilingSpike,
+                        floor, floorRightEdge, platformCenter, platformRightEdge, floorLeftEdge, floorSpike, platformLeftEdge,
+                        hangingBlock };
 
     /* --- COMPONENTS --- */
     [Space(5)][Header("Displays")]
@@ -20,26 +22,28 @@ public class Dungeon2D : MonoBehaviour
     // tiles
     [Space(5)][Header("Tiles")]
     public TileBase[] tileArray;
-    public TileBase center; // 0
-    public TileBase empty; // 1
-    public TileBase leftWall; // 2
-    public TileBase rightWall; // 3
-    public TileBase floor; // 4
-    public TileBase ceiling; // 5
-    public TileBase floorRight; // 6
-    public TileBase floorLeft; // 7
-    public TileBase floorSpike; // 8
-    public TileBase ceilingLeft; // 9
-    public TileBase ceilingRight; // 10
-    public TileBase ceilingSpike; // 11
-    public TileBase leftWallSpike; // 12
-    public TileBase rightWallSpike; // 13
+    public TileBase empty; // 0 
+    public TileBase center; // 1 => 0000, no empties ^^ need to swap empty and center around
+    public TileBase rightEdge; // 2 => 0001, 1 right empty
+    public TileBase ceiling; // 3 => 0010, 2 bottom empty
+    public TileBase ceilingRightCorner; // 4 => 0011, 3 bottom + right empty
+    public TileBase leftEdge; // 5 => 0100, 4 left empty
+    public TileBase centerSpike; // 6 => 0101, 5 left + right empty
+    public TileBase ceilingLeftCorner; // 7 => 0110, 6 left + bottom empty
+    public TileBase ceilingSpike; // 8 => 0111, 7 left + bottom + right empty
+    public TileBase floor; // 9 => 1000, 8 top empty
+    public TileBase floorRightEdge; // 10 => 1001, 9 top + right empty
+    public TileBase platformCenter; // 11 => 1010, 10 top + bottom empty
+    public TileBase platformRightEdge; // 12 => 1011, 11 top + bottom + right empty
+    public TileBase floorLeftEdge; // 13 => 1100, 12 top + left empty
+    public TileBase floorSpike; // 14 => 1101, 13 top + left + right empty
+    public TileBase platformLeftEdge; // 15 => 1110, 14 top + left + bottom empty
+    public TileBase hangingBlock; // 16 => 1111, 15 top + left + bottom + right empty
 
     /* --- VARIABLES --- */
     // grid dimensions 
     [Space(5)] [Header("Grid Dimensions")]
     [HideInInspector] public int[][] grid;
-    public bool printGrid = false;
     [Range(16, 64)] public int sizeVertical = 25;
     [Range(16, 64)] public int sizeHorizontal = 25;
     // brush size
@@ -65,13 +69,24 @@ public class Dungeon2D : MonoBehaviour
 
     // initialize the tile array
     void InitializeTileArray() {
-        tileArray = new TileBase[16];
-        tileArray[0] = center; tileArray[1] = empty; // center, empty
-        tileArray[2] = leftWall; tileArray[3] = rightWall; // left wall, right wall
-        tileArray[4] = floor; tileArray[5] = ceiling; // floor , ceiling
-        tileArray[6] = floorRight; tileArray[7] = floorLeft; tileArray[8] = floorSpike; // floor corners
-        tileArray[9] = ceilingLeft; tileArray[10] = ceilingRight; tileArray[11] = ceilingSpike; // ceiling Corners
-        tileArray[12] = leftWallSpike; tileArray[13] = rightWallSpike; // spikes
+        tileArray = new TileBase[17];
+        tileArray[0] = empty; 
+        tileArray[1] = center; // 1 => 0000, 0 no empties ^^ need to swap empty and center around
+        tileArray[2] = rightEdge; // 2 => 0001, 1 right empty
+        tileArray[3] = ceiling; // 3 => 0010, 2 bottom empty
+        tileArray[4] = ceilingRightCorner; // 4 => 0011, 3 bottom + right empty
+        tileArray[5] = leftEdge; // 5 => 0100, 4 left empty
+        tileArray[6] = centerSpike; // 6 => 0101, 5 left + right empty
+        tileArray[7] = ceilingLeftCorner; // 7 => 0110, 6 left + bottom empty
+        tileArray[8] = ceilingSpike; // 8 => 0111, 7 left + bottom + right empty
+        tileArray[9] = floor; // 9 => 1000, 8 top empty
+        tileArray[10] = floorRightEdge; // 10 => 1001, 9 top + right empty
+        tileArray[11] = platformCenter; // 11 => 1010, 10 top + bottom empty
+        tileArray[12] = platformRightEdge; // 12 => 1011, 11 top + bottom + right empty
+        tileArray[13] = floorLeftEdge; // 13 => 1100, 12 top + left empty
+        tileArray[14] = floorSpike; // 14 => 1101, 13 top + left + right empty
+        tileArray[15] = platformLeftEdge; // 15 => 1110, 14 top + left + bottom empty
+        tileArray[16] = hangingBlock; // 16 => 1111, 15 top + left + bottom + right empty
     }
 
     // initialize a grid
@@ -79,8 +94,10 @@ public class Dungeon2D : MonoBehaviour
         grid = new int[sizeVertical][];
         for (int i = 0; i < sizeVertical; i++) {
             grid[i] = new int[sizeHorizontal];
+            for (int j = 0; j < grid[i].Length; j++) {
+                grid[i][j] = 1;
+            }
         }
-        if (printGrid) { PrintGrid(); }
     }
 
     // initialize a tilemap
@@ -104,7 +121,6 @@ public class Dungeon2D : MonoBehaviour
 
     // prints the dungeon grid to a tilemap
     public void SetTilemap() {
-        if (printGrid) { PrintGrid(); }
         for (int i = 0; i < sizeVertical; i++) {
             for (int j = 0; j < sizeHorizontal; j++) {
                 SetTile(i, j);
@@ -118,7 +134,7 @@ public class Dungeon2D : MonoBehaviour
         Vector3Int tilePosition = GridToTileMap(i, j);
         TileBase tileBase = tileArray[grid[i][j]];
         tilemap.SetTile(tilePosition, tileBase);
-        if (grid[i][j] == 1) {
+        if (grid[i][j] == 0) {
             tilemap.SetTile(tilePosition, null);
         }
     }
@@ -132,25 +148,35 @@ public class Dungeon2D : MonoBehaviour
     }
 
     void CleanCell(int i, int j) {
-        // check only the empty tiles
-        if (grid[i][j] == 1) {
-            // above is not empty, so make it a celing
-            if (i > 0 && grid[i-1][j] != 1) {
-                grid[i - 1][j] = (int)Tiles.ceiling;
+        // check only the non-empty tiles
+        int code = 1; // starting from one to account for the 0th null tile
+        if (grid[i][j] != (int)Tiles.empty) {
+            // is top empty
+            if (CellEmpty(i-1, j)) {
+                code += 8;
             }
-            // below is not empty, so make it a floor
-            if (i < grid.Length - 1 && grid[i + 1][j] != 1) {
-                grid[i + 1][j] = (int)Tiles.floor;
+            // is right empty
+            if (CellEmpty(i, j - 1)) {
+                code += 4;
             }
-            // right is not empty so make it a left wall
-            if (j > 0 && grid[i][j - 1] != 1) {
-                grid[i][j - 1] = (int)Tiles.leftWall;
+            // is bottom empty
+            if (CellEmpty(i+1, j)) {
+                code += 2;
             }
-            // left is not empty so make it a right wall
-            if (j < grid.Length && grid[i][j + 1] != 1) {
-                grid[i][j + 1] = (int)Tiles.rightWall;
+            // is left empty (i think this might be backwards but it just started working and im scared to mess with it)
+            if (CellEmpty(i, j + 1)) {
+                code += 1;
             }
+            grid[i][j] = code;
         } 
+    }
+
+    bool CellEmpty(int i, int j) {
+        if (i < 0 || i > grid.Length - 1 || j < 0 || j > grid[0].Length - 1) { return true; }
+        if (grid[i][j] == (int)Tiles.empty) {
+            return true;
+        }
+        return false;
     }
 
     /* --- BRUSHES --- */
@@ -178,7 +204,7 @@ public class Dungeon2D : MonoBehaviour
         int[] anchor = _anchor.AnchorToGrid(grid, subGrid);
         for (int i = 0; i < subGrid.Length; i++) {
             for (int j = 0; j < subGrid[0].Length; j++) {
-                if (subGrid[i][j] != 0) {
+                if (subGrid[i][j] != Geometry2D.background) {
                     grid[i + anchor[0]][j + anchor[1]] = subGrid[i][j];
                 }
             }

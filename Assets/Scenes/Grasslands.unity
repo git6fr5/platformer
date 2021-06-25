@@ -1718,6 +1718,9 @@ MonoBehaviour:
   dungeon: {fileID: 1794316795865192276}
   characterIndex: 0
   buildMode: 1
+  printGrid: 1
+  cleanGrid: 1
+  physics: 0
 --- !u!4 &492295330
 Transform:
   m_ObjectHideFlags: 0
@@ -4370,21 +4373,23 @@ MonoBehaviour:
   textBox: {fileID: 744952786}
   tilemap: {fileID: 1794316796162166587}
   tileArray: []
-  center: {fileID: 11400000, guid: 477a62593148d0d4ba6896e0d787dd02, type: 2}
-  empty: {fileID: 11400000, guid: b1896f99f8de88748b991c1fd9a07322, type: 2}
-  leftWall: {fileID: 11400000, guid: 717e5375b543b9443a24a994f2bdd6f3, type: 2}
-  rightWall: {fileID: 11400000, guid: 43b8fda6bcbb1414d859655b09d003e5, type: 2}
-  floor: {fileID: 11400000, guid: 13455c01d98e0ee48ab86132b9d4ae99, type: 2}
-  ceiling: {fileID: 11400000, guid: b46d99de587df7f4e9145d019dbf3b96, type: 2}
-  floorRight: {fileID: 11400000, guid: 0680e31bf9009b644995a37a42f82cf6, type: 2}
-  floorLeft: {fileID: 11400000, guid: a4b6e69b1fd5aeb46a3d498670ff9dcc, type: 2}
-  floorSpike: {fileID: 11400000, guid: 11b9d847641b008448c3c929828dce37, type: 2}
-  ceilingLeft: {fileID: 11400000, guid: 20543f1135859694cb1710c5d94f8352, type: 2}
-  ceilingRight: {fileID: 11400000, guid: dccd7e45ff57f9645841ee1cba87ae78, type: 2}
-  ceilingSpike: {fileID: 11400000, guid: f309ba3253b968146b165b009c428e45, type: 2}
-  leftWallSpike: {fileID: 11400000, guid: b54ccb8258e006d4d8fb63ea541d9b67, type: 2}
-  rightWallSpike: {fileID: 11400000, guid: 9e324d7491c9eab4ab9dee05bb3ba8d5, type: 2}
-  printGrid: 0
+  empty: {fileID: 0}
+  center: {fileID: 11400000, guid: ce9c35d5b98166a46b4b92766909a07f, type: 2}
+  rightEdge: {fileID: 11400000, guid: fcf6344315d5b5642ae8676413dcfb7f, type: 2}
+  ceiling: {fileID: 11400000, guid: bd77f6b593312f94dbd0ef2df36e3442, type: 2}
+  ceilingRightCorner: {fileID: 11400000, guid: 77f09970fc73d5743a5455a42f68011a, type: 2}
+  leftEdge: {fileID: 11400000, guid: 357706843ead05b4ba541f5bbdc50f57, type: 2}
+  centerSpike: {fileID: 11400000, guid: bf88d997ca1a4814b8b8278982c74182, type: 2}
+  ceilingLeftCorner: {fileID: 11400000, guid: da2ebe3a4fee07a4b933d79f21cad08a, type: 2}
+  ceilingSpike: {fileID: 11400000, guid: 86479d3ccddc5e54aac4546f7790b547, type: 2}
+  floor: {fileID: 11400000, guid: 4038b59c0330edd4e9f5ce889d0aca8e, type: 2}
+  floorRightEdge: {fileID: 11400000, guid: 2ce545933c283ac4bb30f3db34df7a71, type: 2}
+  platformCenter: {fileID: 11400000, guid: 2d9289d398521f04e9ed3af45baf1326, type: 2}
+  platformRightEdge: {fileID: 11400000, guid: d95b256a4006f6f4d9327e508451f2f3, type: 2}
+  floorLeftEdge: {fileID: 11400000, guid: 49723e8c4fec63b44aa9c0a4c9252ed2, type: 2}
+  floorSpike: {fileID: 11400000, guid: 894ab7c162c65644389a4e0a1b31c81b, type: 2}
+  platformLeftEdge: {fileID: 11400000, guid: 1239db1d0cc43334a934c7a98460dcb6, type: 2}
+  hangingBlock: {fileID: 11400000, guid: f91d135d931f06040bc6511f297b2789, type: 2}
   sizeVertical: 64
   sizeHorizontal: 64
   sizeMin: 0.05
@@ -4901,9 +4906,9 @@ MonoBehaviour:
   jumping: 0
   doubleJumping: 0
   justJumped: 1
-  jumpBuffer: 0.2
-  defaultGravity: 10
-  jumpGravity: 3
+  jumpBuffer: 0.15
+  defaultGravity: 5
+  jumpGravity: 2
   onGround: 0
   crouchForce: 50
   crouching: 0
