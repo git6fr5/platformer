@@ -53,7 +53,7 @@ public class Dungeon2D : MonoBehaviour
 
     /* --- UNITY --- */
     void Start() {
-        Initialize();
+        //Initialize();
     }
 
     /* --- INITIALIZERS --- */

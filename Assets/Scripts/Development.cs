@@ -17,7 +17,15 @@ public class Development : MonoBehaviour
     /* --- METHODS --- */
     void Start() {
         SetPlayer(characters[characterIndex]);
-        BuildMode();
+        dungeon.Initialize();
+        if (buildMode) { BuildMode(); }
+        else {
+            for (int i = 0; i < dungeon.density; i++) {
+                dungeon.AddShape(Geometry2D.Shape.ellipse, dungeon.RandomAnchor());
+            }
+            dungeon.CleanGrid();
+            dungeon.SetTilemap();
+        }
     }
 
     void Update() { 
@@ -39,7 +47,7 @@ public class Development : MonoBehaviour
         if (buildMode) {
             Time.timeScale = 0f;
             cameraContainer.enabled = false;
-            Camera.main.orthographicSize = 50f;
+            Camera.main.orthographicSize = 25f;
             Camera.main.transform.position = new Vector3(0, 0, Camera.main.transform.position.z);
         }
         else {
