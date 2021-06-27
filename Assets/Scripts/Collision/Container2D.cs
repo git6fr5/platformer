@@ -5,10 +5,13 @@ using UnityEngine;
 public class Container2D : MonoBehaviour
 {
     /* --- DEBUG --- */
+   [Space(5)][Header("Debugging")]
     public bool doDebug = false;
     protected string debugTag = "[Container2D]: ";
 
     /* --- COMPONENTS ---*/
+    // the tags for what this container collects
+    [Space(5)][Header("Tags")]
     public string[] containerTags;
 
     /* --- VARIABLES --- */
@@ -25,25 +28,28 @@ public class Container2D : MonoBehaviour
     }
 
     void OnEnable() {
-        container = new List<Collider2D>();
+        if (!stickyContainer) { container = new List<Collider2D>(); }
     }
 
     /* --- METHODS --- */
     void Add(Collider2D collider) {
+        // add the item if it is in the container and has the correct tag
         foreach (string containerTag in containerTags) {
             if (!container.Contains(collider) && collider.tag == containerTag) {
                 if (doDebug) { print(debugTag + "Added " + collider.name); }
                 container.Add(collider);
+                // trigger an event
                 OnAdd(collider);
             }
         }  
     }
 
     void Remove(Collider2D collider) { 
-        if (stickyContainer) { return; }
-        if (container.Contains(collider)) {
+        // remove an item if it is no longer in the container
+        if (!stickyContainer && container.Contains(collider)) {
             if (doDebug) { print(debugTag + "Removed " + collider.name); }
             container.Remove(collider);
+            // trigger an event
             OnRemove(collider);
         }
     }

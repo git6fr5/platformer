@@ -7,9 +7,21 @@ using UnityEngine.UI;
 public class Status2D : MonoBehaviour
 {
     /* --- COMPONENTS --- */
-    public Rigidbody2D body;
-    public Character2D character;
+    // rendering
+    [Space(5)][Header("Renderer")]
+    public Character character;
     public Slider healthSlider;
+    // collision
+    [Space(5)][Header("Collision")]
+    public Rigidbody2D body;
+    public Collider2D mesh;
+    public Collider2D hitbox;
+    public Container2D vision;
+    public Container2D groundCheck;
+    // equipment
+    [Space(5)][Header("Equipment")]
+    public Weapon2D weapon;
+    public Weapon2D secondaryWeapon;
 
     /* --- VARIABLES --- */
     // health
@@ -111,18 +123,16 @@ public class Status2D : MonoBehaviour
         if (!justJumped && onGround) {
             jumping = false;
         }
-        if (jumping || doubleJumping) {
-            if (body.velocity.y > 0f) {
+        if ((jumping || doubleJumping) && body.velocity.y > 0f) {
                 body.gravityScale = jumpGravity;
-            }
-            else {
-                body.gravityScale = defaultGravity;
-            }
+        }
+        else {
+            body.gravityScale = defaultGravity;
         }
     }
 
     void GroundFlag() { 
-        if (character.groundCheck.container.Count > 0) {
+        if (groundCheck.container.Count > 0) {
             onGround = true;
         }
         else {

@@ -1836,11 +1836,10 @@ MonoBehaviour:
   - {fileID: 1728721533}
   - {fileID: 259845915}
   - {fileID: 2930964960937213266}
-  - {fileID: 1564913463}
   dungeon: {fileID: 1794316795865192276}
   background: {fileID: 1794316795865192108}
-  characterIndex: 3
-  buildMode: 1
+  characterIndex: 0
+  buildMode: 0
   printGrid: 1
   cleanGrid: 1
   physics: 1
@@ -3863,6 +3862,88 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1314472119}
   m_CullTransparentMesh: 0
+--- !u!1 &1376873688
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1376873689}
+  - component: {fileID: 1376873690}
+  m_Layer: 0
+  m_Name: Pink Flower Grass Layout
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1376873689
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1376873688}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1794316796162166585}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1376873690
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1376873688}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db16bdfe35d91d4aab8243b38fd0f3c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  layoutTiles:
+  - {fileID: 11400000, guid: 7fb6c48365e7b0d4ea67ced10ec17299, type: 2}
+  - {fileID: 11400000, guid: 824c89e307fb439449e8471e6312594e, type: 2}
+  - {fileID: 11400000, guid: 22d6d80c46d4f784aa68ef3e79a1ca27, type: 2}
+  - {fileID: 11400000, guid: 7441bc41db1c0f94ea3ccf7d22c9e18c, type: 2}
+  - {fileID: 11400000, guid: 9406b560b07f0ba4c9f6548d75ebe7a2, type: 2}
+  - {fileID: 11400000, guid: a4d85db2c3517244b9c0fe33f7c72f04, type: 2}
+  - {fileID: 11400000, guid: 881c9c3fffb311a4f921a772f9df2507, type: 2}
+  - {fileID: 11400000, guid: 5b3c8540f0b82464499811d6f5f93d06, type: 2}
+  - {fileID: 11400000, guid: 027cba04695566e4d98dd9099f8952a0, type: 2}
+  - {fileID: 11400000, guid: a03d28050a30e624683bee4e22b0fa49, type: 2}
+  - {fileID: 11400000, guid: cbd279f1ed36ef84f869c5d3f50b3216, type: 2}
+  - {fileID: 11400000, guid: 68bc42a48bfeaa8459d94e49fe682f21, type: 2}
+  - {fileID: 11400000, guid: 267a6adae7cb3b845bf31804bf2c84a7, type: 2}
+  - {fileID: 11400000, guid: 1a5988ca9d444904998aa31188cf0d2b, type: 2}
+  - {fileID: 11400000, guid: 9c46550ff8c000143964d3b9636cd6a5, type: 2}
+  - {fileID: 11400000, guid: 125738751a6b5134fad7da8721b119f8, type: 2}
+  - {fileID: 11400000, guid: 5ea67ef5929f29340864e92e94e331eb, type: 2}
+  - {fileID: 11400000, guid: 20ad78b3359741b4c9c3e46c3edd42b8, type: 2}
+  - {fileID: 11400000, guid: e25846ee84fa2894c9a35eac36e000a8, type: 2}
+  - {fileID: 11400000, guid: a5f76f8f35742e3489c65c0579a46ba3, type: 2}
+  tileArray: []
+  empty: {fileID: 0}
+  center: {fileID: 0}
+  rightEdge: {fileID: 0}
+  ceiling: {fileID: 0}
+  ceilingRightCorner: {fileID: 0}
+  leftEdge: {fileID: 0}
+  centerSpike: {fileID: 0}
+  ceilingLeftCorner: {fileID: 0}
+  ceilingSpike: {fileID: 0}
+  floor: {fileID: 0}
+  floorRightEdge: {fileID: 0}
+  platformCenter: {fileID: 0}
+  platformRightEdge: {fileID: 0}
+  floorLeftEdge: {fileID: 0}
+  floorSpike: {fileID: 0}
+  platformLeftEdge: {fileID: 0}
+  hangingBlock: {fileID: 0}
 --- !u!1 &1391792008
 GameObject:
   m_ObjectHideFlags: 0
@@ -4232,7 +4313,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1564913461
 Transform:
   m_ObjectHideFlags: 0
@@ -5783,6 +5864,88 @@ Transform:
   m_Father: {fileID: 259845912}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2011223798
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2011223799}
+  - component: {fileID: 2011223800}
+  m_Layer: 0
+  m_Name: Grass Layout
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2011223799
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2011223798}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1794316796162166585}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2011223800
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2011223798}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db16bdfe35d91d4aab8243b38fd0f3c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  layoutTiles:
+  - {fileID: 11400000, guid: bef530a1e81b5164fb1b525ab2bba46a, type: 2}
+  - {fileID: 11400000, guid: 3d2eb5c10f4fd424ba8d7e796c4c8eb3, type: 2}
+  - {fileID: 11400000, guid: 8471a756424e0864aac15196148a962e, type: 2}
+  - {fileID: 11400000, guid: 558a542e39f84234b80ce7738c0627ef, type: 2}
+  - {fileID: 11400000, guid: 9768b63601fd47545b5bf173ffe654b2, type: 2}
+  - {fileID: 11400000, guid: 8584d5c7dd1df81459e8c644f1e574ee, type: 2}
+  - {fileID: 11400000, guid: 61349ad22229d6249b8041632ba9584e, type: 2}
+  - {fileID: 11400000, guid: 44f55f524265c90489b0b4664ec498df, type: 2}
+  - {fileID: 11400000, guid: 6066d1fc04406444f886fd19f712bbd3, type: 2}
+  - {fileID: 11400000, guid: bae47ec712ffbbc499a343a37e109e77, type: 2}
+  - {fileID: 11400000, guid: 443ef1cca569aa44998fbaf7c44685fa, type: 2}
+  - {fileID: 11400000, guid: c0988edee3a9d7244ad8743143cbc3ef, type: 2}
+  - {fileID: 11400000, guid: bcd75c6fa5fc50e4d8e03e2cf0d86e89, type: 2}
+  - {fileID: 11400000, guid: 87fe0bc3b0336dd43ae7aa7ed45d73af, type: 2}
+  - {fileID: 11400000, guid: f3edbd7fbf4c6254186d94451c09a808, type: 2}
+  - {fileID: 11400000, guid: 5abe448e14f1d0947950590e0d04c61e, type: 2}
+  - {fileID: 11400000, guid: 77265589dcde2384abad2191a6265146, type: 2}
+  - {fileID: 11400000, guid: cbbda6f4bcce2e04d99e07147b4ba0aa, type: 2}
+  - {fileID: 11400000, guid: fd5515cdff11d3842ab9e5cf5556a4ec, type: 2}
+  - {fileID: 11400000, guid: 5775d833561194449a330e6e8fbef376, type: 2}
+  tileArray: []
+  empty: {fileID: 0}
+  center: {fileID: 0}
+  rightEdge: {fileID: 0}
+  ceiling: {fileID: 0}
+  ceilingRightCorner: {fileID: 0}
+  leftEdge: {fileID: 0}
+  centerSpike: {fileID: 0}
+  ceilingLeftCorner: {fileID: 0}
+  ceilingSpike: {fileID: 0}
+  floor: {fileID: 0}
+  floorRightEdge: {fileID: 0}
+  platformCenter: {fileID: 0}
+  platformRightEdge: {fileID: 0}
+  floorLeftEdge: {fileID: 0}
+  floorSpike: {fileID: 0}
+  platformLeftEdge: {fileID: 0}
+  hangingBlock: {fileID: 0}
 --- !u!1 &2030196709
 GameObject:
   m_ObjectHideFlags: 0
@@ -6562,8 +6725,8 @@ MonoBehaviour:
   textBox: {fileID: 744952786}
   tilemap: {fileID: 1794316796162166587}
   layouts:
-  - {fileID: 1090282857}
-  - {fileID: 942454567}
+  - {fileID: 2011223800}
+  - {fileID: 1376873690}
   layoutDistribution:
   - 1
   - 0.15
@@ -6620,6 +6783,8 @@ Transform:
   m_Children:
   - {fileID: 1090282855}
   - {fileID: 942454568}
+  - {fileID: 2011223799}
+  - {fileID: 1376873689}
   m_Father: {fileID: 1794316795865192107}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -7066,9 +7231,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 91606f4d49a663b48b7e36b10e25d125, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  body: {fileID: 2930964960419966037}
-  character: {fileID: 1728721533}
+  characterRenderer: {fileID: 0}
   healthSlider: {fileID: 2930964961185695101}
+  body: {fileID: 2930964960419966037}
+  mesh: {fileID: 0}
+  hitbox: {fileID: 0}
+  vision: {fileID: 0}
+  groundCheck: {fileID: 0}
+  weapon: {fileID: 0}
+  secondaryWeapon: {fileID: 0}
   maxHealth: 100
   currHealth: 100
   justHurt: 0
@@ -7128,20 +7299,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   doDebug: 1
   dash: 0
-  quickDash: 0
   jump: 0
   slam: 0
-  crouch: 0
   attack: 0
   attack2: 0
   targetPoint: {x: 0, y: 0}
-  doubleTapBuffer: 0.25
   rightDashKey: 100
   leftDashKey: 97
   jumpKey: 119
   slamKey: 115
-  crouchKey: 304
-  quickDashKey: 32
   attackButton: 0
   secondaryAttackButton: 1
 --- !u!114 &2930964960419966035
@@ -7926,9 +8092,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 91606f4d49a663b48b7e36b10e25d125, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  body: {fileID: 8561197651117161083}
-  character: {fileID: 8561197652987518010}
+  characterRenderer: {fileID: 0}
   healthSlider: {fileID: 8561197651104136345}
+  body: {fileID: 8561197651117161083}
+  mesh: {fileID: 0}
+  hitbox: {fileID: 0}
+  vision: {fileID: 0}
+  groundCheck: {fileID: 0}
+  weapon: {fileID: 0}
+  secondaryWeapon: {fileID: 0}
   maxHealth: 1000
   currHealth: 1000
   justHurt: 0
@@ -7984,16 +8156,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   doDebug: 0
+  debugTag: '[Input2D]: '
   dash: 0
-  quickDash: 0
   jump: 0
   slam: 0
-  crouch: 0
   attack: 0
   attack2: 0
   targetPoint: {x: 0, y: 0}
   vision: {fileID: 8561197651357076731}
   followRadius: 3
+  target: {fileID: 0}
+  buffer: 1
 --- !u!114 &8561197651117161081
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8030,7 +8203,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!50 &8561197651117161083
 Rigidbody2D:
   serializedVersion: 4
@@ -8545,7 +8718,7 @@ RectTransform:
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}

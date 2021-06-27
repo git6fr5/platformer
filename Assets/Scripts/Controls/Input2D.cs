@@ -11,10 +11,8 @@ public class Input2D : MonoBehaviour
 
     /* --- VARIABLES --- */
     public float dash;
-    public bool quickDash;
     public bool jump;
     public bool slam;
-    public bool crouch;
     public bool attack;
     public bool attack2;
     public Vector2 targetPoint;

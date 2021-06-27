@@ -22,83 +22,60 @@ public class Output2D : MonoBehaviour
     }
 
     void Update() {
+        // reset
+        Reset();
         // dashing
         if (!state.justDashed && input.dash != 0) { Dash(); }
-        if (!state.quickDashing && input.quickDash) { QuickDash(); }
         // jumping
         if (state.onGround && !state.crouching && !state.justJumped && input.jump) { Jump(); }
-        //if (state.jumping && state.justJumped && input.jump) { DoubleJump(); }
-        // crouching
-        if (input.crouch || state.stickyCrouch) { Crouch(); }
-        else if (!input.crouch && state.crouching) { Uncrouch(); }
         // slam
         if (input.slam) { Slam(); }
         // attacking
-        if (state.character.weapon != null && !state.character.weapon.attacking && input.attack) { Attack(); }
-        if (state.character.secondaryWeapon != null && !state.character.secondaryWeapon.attacking && input.attack2) { SecondaryAttack(); }
+        if (state.weapon != null && !state.weapon.attacking && input.attack) { Attack(); }
+        if (state.secondaryWeapon != null && !state.secondaryWeapon.attacking && input.attack2) { SecondaryAttack(); }
         // misc
         if (damp) { Damp(); }
-        Renderer();
     }
 
     /* --- METHODS --- */
     void Dash() {    
         if (doDebug) { print(debugTag + "Dashing"); }
+        // adjust the animation
+        state.character.SetAnimation(state.character.dashAnimation);
+        if (!state.weapon.point) { state.transform.right = Vector2.right * input.dash; }
+        // add the force
         body.velocity = new Vector2(0, body.velocity.y);
         body.AddForce(new Vector2(input.dash * state.dashForce * state.dashMultiplier, 0));
         state.justDashed = true;
     }
 
-    void QuickDash() {
-        if (doDebug) { print(debugTag + "Quick Dashing"); }
-        state.character.characterRenderer.quickDashParticle?.Fire();
-        state.quickDashing = true;
-    }
-
     void Jump() {
         if (doDebug) { print(debugTag + "Jumping"); }
-        state.character.characterRenderer.jumpParticle?.Fire();
+        // adjust the animation
+        state.character.jumpParticle?.Fire();
+        // add the force
         body.velocity = new Vector2(body.velocity.x, 0);
         body.AddForce(new Vector2(0, state.jumpForce));
         state.justJumped = true;
     }
 
-    void DoubleJump() { 
-        if (doDebug) { print(debugTag + "Double Jumping"); }
-        state.character.characterRenderer.doubleJumpParticle?.Fire();
-        body.velocity = new Vector2(body.velocity.x, 0);
-        body.AddForce(new Vector2(0, state.jumpForce));
-        state.doubleJumping = true;
-        state.jumping = false;
-    }
-
-    void Crouch() {
-        if (doDebug) { print(debugTag + "Crouching"); }
-        body.velocity = new Vector2(body.velocity.x * 0.95f, body.velocity.y );
-        state.character.mesh.enabled = false;
-        state.crouching = true;
-    }
-    
-    void Uncrouch() {
-        state.character.mesh.enabled = true;
-        state.crouching = false;
-    }
-
     void Slam() {
         if (doDebug) { print(debugTag + "Slamming"); }
-        if (!state.crouching) { state.character.characterRenderer.crouchParticle?.Fire(); }
+        // adjust the animation
+        state.character.crouchParticle?.Fire();
+        // add the force
         body.AddForce(new Vector2(0, -state.crouchForce));
         state.crouching = true;
     }
 
     void Attack() {
         if (doDebug) { print(debugTag + "Attacking"); }
-        state.character.weapon.Activate(input.targetPoint);
+        state.weapon.Activate(input.targetPoint);
     }
 
     void SecondaryAttack() {
         if (doDebug) { print(debugTag + "Secondary Attack"); }
-        state.character.secondaryWeapon.Activate(input.targetPoint);
+        state.secondaryWeapon.Activate(input.targetPoint);
     }
 
     void Damp() { 
@@ -108,27 +85,13 @@ public class Output2D : MonoBehaviour
         }
     }
 
-    void Renderer() {
+    void Reset() {
+        state.character.SetAnimation(null);
+        state.character.SetMaterial(null);
+        if (state.weapon.point) { Point(); }
+    }
 
-        Vector2 dir = input.targetPoint - (Vector2)transform.position;
-        if (dir.x < 0.01f) {
-            state.character.transform.right = Vector2.left;
-        }
-        else if (dir.x > 0.01f) {
-            state.character.transform.right = Vector2.right;
-        }
-        if (input.dash != 0) {
-            state.character.characterRenderer.SetAnimation(state.character.characterRenderer.dashAnimation);
-        }
-        //float angle = 3 * Mathf.Round(Mathf.Atan(dir.y / dir.x) * 180f / Mathf.PI / 3);
-        else {
-            state.character.characterRenderer.SetAnimation(null);
-        }
-        if (state.justHurt) {
-            state.character.characterRenderer.SetMaterial(state.character.characterRenderer.hurtMaterial);
-        }
-        else {
-            state.character.characterRenderer.SetMaterial(null);
-        }
+    void Point() { 
+        // point
     }
 }
