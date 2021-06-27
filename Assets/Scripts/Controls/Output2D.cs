@@ -23,11 +23,11 @@ public class Output2D : MonoBehaviour
 
     void Update() {
         // reset
-        Reset();
+        //Reset();
         // dashing
         if (!state.justDashed && input.dash != 0) { Dash(); }
         // jumping
-        if (state.onGround && !state.crouching && !state.justJumped && input.jump) { Jump(); }
+        if (state.onGround && !state.justJumped && input.jump) { Jump(); }
         // slam
         if (input.slam) { Slam(); }
         // attacking
@@ -64,8 +64,7 @@ public class Output2D : MonoBehaviour
         // adjust the animation
         state.character.crouchParticle?.Fire();
         // add the force
-        body.AddForce(new Vector2(0, -state.crouchForce));
-        state.crouching = true;
+        body.AddForce(new Vector2(0, -state.slamForce));
     }
 
     void Attack() {

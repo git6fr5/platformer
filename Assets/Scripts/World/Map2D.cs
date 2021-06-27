@@ -18,11 +18,13 @@ public class Map2D : MonoBehaviour
     private float distributionSum = 0f;
 
     /* --- VARIABLES --- */
+    [Space(5)] [Header("Auto Generate")]
+    public bool generate = true;
     // arena dimensions 
     [Space(5)] [Header("Arena Dimensions")]
     [HideInInspector] public int[][] grid;
-    [Range(16, 64)] public int sizeVertical = 25;
-    [Range(16, 64)] public int sizeHorizontal = 25;
+    [Range(16, 128)] public int sizeVertical = 64;
+    [Range(16, 128)] public int sizeHorizontal = 64;
     // brush size
     [Space(5)][Header("Brush Size")]
     [Range(0.05f, 0.8f)] public float sizeMin = 0.2f;
@@ -32,8 +34,18 @@ public class Map2D : MonoBehaviour
     int vertOffset = 0;
 
     /* --- UNITY --- */
-    void Start() {
-        //Initialize();
+    void Awake() {
+        Initialize();
+        if (generate) { Generate(); }
+    }
+
+    /* --- VIRTUAL --- */
+    public virtual void Generate(){
+        // generate
+    }
+
+    public virtual void OrganizeLayouts() { 
+        // organize layouts
     }
 
     /* --- INITIALIZERS --- */
@@ -41,9 +53,11 @@ public class Map2D : MonoBehaviour
         foreach (float num in tileLayoutDistribution) {
             distributionSum += num;
         }
+        OrganizeLayouts();
         SetGrid();
         SetMap();
     }
+
 
     // initialize a grid
     void SetGrid() {
@@ -75,7 +89,7 @@ public class Map2D : MonoBehaviour
         Vector3Int tilePosition = GridToTileMap(i, j);
         // pick a tile from a random layout style
         Layout2D tileLayout = RandomLayout();
-        if (grid[i][j] > tileLayout.tiles.Length) { return; }
+        if (grid[i][j] >= tileLayout.tiles.Length) { return; }
         TileBase tileBase = RandomLayout().tiles[grid[i][j]];
         // set the tile 
         tilemap.SetTile(tilePosition, tileBase);
@@ -97,7 +111,7 @@ public class Map2D : MonoBehaviour
 
     // checks if a coordinate is in the grid
     public bool PointInGrid(int[] point) {
-        return (point[1] < sizeHorizontal && point[1] > 0 && point[0] < sizeVertical && point[0] > 0);
+        return (point[1] < sizeHorizontal && point[1] >= 0 && point[0] < sizeVertical && point[0] >= 0);
     }
 
     // mouse click to anchor point

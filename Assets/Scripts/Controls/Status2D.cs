@@ -63,11 +63,8 @@ public class Status2D : MonoBehaviour
     [Range(1f, 15f)] public float jumpGravity = 3f;
     public bool onGround = false;
     // crouching
-    [Space(5)] [Header("Crouching")]
-    public float crouchForce = 10f;
-    public bool crouching = false;
-    public bool stickyCrouch = false;
-
+    [Space(5)] [Header("Slamming")]
+    public float slamForce = 10f;
 
     /* --- UNITY --- */
     void Start() {

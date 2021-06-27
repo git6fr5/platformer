@@ -18,7 +18,9 @@ public class Follow : Container2D
 
     /* --- UNITY --- */
     void Update() {
-        Move();
+        Vector3 pos = follow.transform.position - (Vector3)bound.offset;
+        transform.position = new Vector3(pos.x, pos.y, transform.position.z);
+        //Move();
     }
 
     void Move() {
@@ -27,7 +29,7 @@ public class Follow : Container2D
         if (!container.Contains(follow)) { x = outSpeed; }
         // move the body
         Vector3 position = transform.position + (Vector3)bound.offset;
-        Vector2 direction = ((Vector2)(follow.transform.position - position)).normalized;
+        Vector2 direction = (Vector2)(follow.transform.position - position).normalized;
         body.velocity = x * direction;
     }
 }

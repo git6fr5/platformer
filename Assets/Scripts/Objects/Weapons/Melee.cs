@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Melee : Weapon2D
 {
-
+    public Transform equipment;
     public Particle particle;
 
     public override void Attack() {
@@ -15,23 +15,28 @@ public class Melee : Weapon2D
     }
 
     void StartAttack() {
+        // fire the particle
+        particle.Fire();
+        // rotate the weapon
         hand.transform.localEulerAngles = new Vector3(0, 0, -90f);
+        // activate the body
+        hand.transform.parent = null;
         hand.simulated = true;
         hand.isKinematic = false;
-        particle.Fire();
+        // end the start attack
         startingAttack = false;
     }
 
     void BackSwing() {
-        //hand.transform.localPosition = hand.transform.localPosition - Vector3.right * 0.5f * Time.deltaTime / backSwingTime; 
     }
 
-    void Swing() { 
-        hand.transform.localPosition = hand.transform.localPosition + Vector3.right * 0.5f * Time.deltaTime / swingTime;
+    void Swing() {
+        hand.simulated = false;
+        hand.isKinematic = false;
+        hand.transform.parent = equipment;
     }
 
     void Reset() {
-        hand.simulated = false;
-        hand.isKinematic = false;
+        
     }
 }

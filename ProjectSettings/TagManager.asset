@@ -9,6 +9,10 @@ TagManager:
   - NPC
   - Path
   - Particle
+  - Character
+  - Hitbox
+  - Mesh
+  - Arena
   layers:
   - Default
   - TransparentFX
