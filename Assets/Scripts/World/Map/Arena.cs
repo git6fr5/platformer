@@ -2,10 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using Photon.Pun;
 
 public class Arena : Map2D
 {
     /* --- COMPONENTS --- */
+    public string message;
+
     [Space(5)][Header("Visuals")]
     public Particle explodeParticle;
     public Particle growParticle;
@@ -28,10 +31,22 @@ public class Arena : Map2D
     [Range(0.05f, 0.999f)] public float growThreshold = 0.95f;
     int[] reOrder = new int[] { -1, 7, 8, 12, 13, 6, 10, 11, 15, 2, 3, 17, 18, 1, 0, 16, 19, 0, 0, 0, 0, 0, 0, 0, 0 };
 
+    /* --- PHOTON --- */
+    [PunRPC]
+    void PUNCutTile(int i, int j) {
+        CutTile(i, j);
+    }
+
+    [PunRPC]
+    void PUNGrowCell(int i, int j) {
+        GrowCell(i, j);
+    }
+
+
     /* --- OVERRIDE --- */
     public override void Generate() {
         ConstructGrid();
-        if (grow) { StartCoroutine(GrowArena(growthInterval)); }
+        if (grow) { StartCoroutine(IEGrowArena(growthInterval)); }
         PrintMap();
     }
 
@@ -98,6 +113,18 @@ public class Arena : Map2D
         return false;
     }
 
+    void GrowArena() { 
+        for (int i = 0; i < grid.Length; i++) {
+            for (int j = 0; j < grid[0].Length; j++) {
+                if (grid[i][j] == (int)Tiles.empty) {
+                    if (Random.Range(0f, 1f)> growThreshold) {
+                        GrowCell(i, j);
+                    }
+                }
+            }
+        }
+    }
+
     void GrowCell(int i, int j)
     {
         int code = 0;
@@ -121,6 +148,9 @@ public class Arena : Map2D
         if (code != 15) {
             grid[i][j] = (int)Tiles.center;
         }
+        // sync with the network
+        PhotonView photonView = PhotonView.Get(this);
+        photonView.RPC("PUNGrowCell", RpcTarget.All, i, j);
     }
 
     public void CutTile(int i, int j) {
@@ -134,6 +164,9 @@ public class Arena : Map2D
         grid[i][j] = (int)Tiles.empty;
         CleanCell(i, j);
         PrintTile(i, j);
+        // sync with the network
+        PhotonView photonView = PhotonView.Get(this);
+        photonView.RPC("PUNCutTile", RpcTarget.All, i, j);
     }
 
     // reorder the layouts to be able to tell what type they are
@@ -190,21 +223,15 @@ public class Arena : Map2D
     }
 
     /* --- COROUTINES --- */
-    IEnumerator GrowArena(float delay)
+    IEnumerator IEGrowArena(float delay)
     {
         yield return new WaitForSeconds(delay);
-        for (int i = 0; i < grid.Length; i++) {
-            for (int j = 0; j < grid[0].Length; j++) {
-                if (grid[i][j] == (int)Tiles.empty) {
-                    if (Random.Range(0f, 1f)> growThreshold) {
-                        GrowCell(i, j);
-                    }
-                }
-            }
+        if (photonView.IsMine) {
+            GrowArena();
         }
         CleanGrid();
         PrintMap();
-        if (grow) { StartCoroutine(GrowArena(growthInterval)); };
+        if (grow) { StartCoroutine(IEGrowArena(growthInterval)); };
         yield return null;
     }
 }

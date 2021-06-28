@@ -7,105 +7,116 @@ using UnityEngine.UI;
 
 public class MenuManager : MonoBehaviourPunCallbacks
 {
-    /* --- DEBUG --- */
-    public bool doDebug = true;
-    string DebugTag = "[Menu]: ";
+    /* --- Debugging ---*/
+    //private bool isDebug = true;
+    private string DebugTag = "[CardGame MenuManager]: ";
 
-    /* --- COMPONENTS --- */
-    // inputs
-    [Space(5)][Header("Input Fields")]
+    /* --- Components --- */
+
+    // Inputs
     public InputField playerName;
-    // buttons
-    [Space(5)] [Header("Buttons")]
-    public Play playButton;
-    
-    /* --- VARIABLES --- */
-    // rooms
-    [Space(5)] [Header("Rooms")]
-    public int rooms = 0;
-    public int players = 0;
-    List<RoomInfo> roomInfoList = new List<RoomInfo>();
-    public List<string> roomIdList = new List<string>();
+    public InputField roomName;
+
+    // Buttons
+    public Button createRoomButton;
+    public Button joinRoomButton;
+    public Button playButton;
+
+    // Rooms
+    public RoomListing roomListing;
+    public Transform roomList;
 
     /* --- Unity Methods --- */
-    void Awake() {
+    void Awake()
+    {
         PhotonNetwork.AutomaticallySyncScene = true;
+
+        createRoomButton.interactable = false;
+        joinRoomButton.interactable = false;
+
         PhotonNetwork.ConnectUsingSettings();
     }
 
-    /* --- PHOTON --- */
+    /* --- Photon Methods --- */
     
-    // connection
-    public override void OnConnectedToMaster() {
-        print(DebugTag + "A player has connected to master");
+    // Connection
+    public override void OnConnectedToMaster()
+    {
+        Debug.Log(DebugTag + "A player has connected to master");
+
         // Join the lobby
         PhotonNetwork.JoinLobby();
+
         // Allow interaction with the menu
+        createRoomButton.interactable = true;
+        joinRoomButton.interactable = true;
     }
 
-    // disconnection
-    public override void OnDisconnected(DisconnectCause cause) {
+    // Disconnection
+    public override void OnDisconnected(DisconnectCause cause)
+    {
         Debug.Log("Disconnected because " + cause.ToString());
     }
 
-    // lobby
-    public override void OnJoinedLobby() {
+    // Lobby
+    public override void OnJoinedLobby()
+    {
         Debug.Log("A player has joined the lobby");
-        playButton.interactable = true;
     }
 
-    // room
-    public override void OnJoinedRoom() {
+    // Room
+    public override void OnJoinedRoom()
+    {
         Debug.Log(DebugTag + PhotonNetwork.LocalPlayer.NickName + " has joined the room " + PhotonNetwork.CurrentRoom.Name);
-        if (PhotonNetwork.IsMasterClient) {
-            PhotonNetwork.LoadLevel(1);
-            Debug.Log("Beginning game");
-        }
     }
 
-    // room List
-    public override void OnRoomListUpdate(List<RoomInfo> _roomInfoList) {
+    // Room List
+    public override void OnRoomListUpdate(List<RoomInfo> roomInfoList)
+    {
         Debug.Log(DebugTag + "Updating Room List");
-        List<RoomInfo> roomInfoList = _roomInfoList;
-        roomIdList = new List<string>();
-        foreach (RoomInfo roomInfo in roomInfoList) {
-            roomIdList.Add(roomInfo.Name);
+        foreach (RoomInfo roomInfo in roomInfoList)
+        {
+            RoomListing _roomListing = Instantiate(roomListing, roomList);
+            _roomListing.gameObject.SetActive(true);
+            _roomListing.SetInfo(roomInfo);
         }
         Debug.Log(DebugTag + "Found " + roomInfoList.Count + " rooms");
     }
 
-    /* --- METHODS --- */
 
-    // sets the players name
-    public string SetPlayerName() {
-        if (playerName.text == "") { playerName.text = players.ToString(); }
-        PhotonNetwork.LocalPlayer.NickName = playerName.text;
-        players++;
-        return playerName.text; 
-    }
+    /* --- Button Methods --- */
 
-    // sets the room id for the player
-    public string SetRoomID() { 
-        foreach (RoomInfo roomInfo in roomInfoList) {
-            print(roomInfo.Name);
+    // Create Room
+    public void OnClick_CreateRoom()
+    {
+        if (roomName.text != "" && playerName.text != "")
+        {
+            PhotonNetwork.LocalPlayer.NickName = playerName.text;
+            PhotonNetwork.CreateRoom(roomName.text);
+            Debug.Log(DebugTag + playerName.text + "has created the room: " + roomName.text);
         }
-        if (roomInfoList.Count > 0) {
-            return roomInfoList[0].Name;
+        else { Debug.Log(DebugTag + "Room does not have a name"); }
+    }
+
+    // Join Room
+    public void OnClick_JoinRoom()
+    {
+        if (roomName.text != "" && playerName.text != "")
+        {
+            PhotonNetwork.LocalPlayer.NickName = playerName.text;
+            PhotonNetwork.JoinRoom(roomName.text);
+            Debug.Log(DebugTag + "Room or player does not have a name");
         }
-        return CreateRoom();
     }
 
-    // creates a room in case one couldn't be found
-    public string CreateRoom() {
-        string roomID = rooms.ToString();
-        PhotonNetwork.CreateRoom(roomID);
-        rooms += 1;
-        return roomID;
-    }
-
-    // joins a room
-    public void JoinRoom(string roomID) {
-        PhotonNetwork.JoinRoom(roomID);
+    // Play Game
+    public void OnClick_Play()
+    {
+        if (PhotonNetwork.IsMasterClient)
+        {
+            PhotonNetwork.LoadLevel(1);
+            Debug.Log(DebugTag + "Beginning game");
+        }
     }
 
 }

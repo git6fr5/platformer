@@ -4,11 +4,14 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Tilemaps;
 using UnityEngine.Events;
+using Photon.Pun;
 
 public class Map2D : MonoBehaviour
 {
 
     /* --- COMPONENTS --- */
+    [Space(5)][Header("Networking")]
+    public PhotonView photonView;
     [Space(5)][Header("Tilemap")]
     public Tilemap tilemap;
     // layouts
@@ -36,7 +39,29 @@ public class Map2D : MonoBehaviour
     /* --- UNITY --- */
     void Awake() {
         Initialize();
+        if (photonView.IsMine) { generate = true; }
+        else { generate = false; }
         if (generate) { Generate(); }
+    }
+
+    /* --- PHOTON --- */
+    [PunRPC]
+    public void PUNSendGridFromHost() {
+        PhotonView photonView = PhotonView.Get(this);
+        if (photonView.IsMine) {
+            photonView.RPC("PUNSendGrid", RpcTarget.All, grid);
+        }
+    }
+
+    [PunRPC] 
+    public void PUNSendGrid(int[][] newGrid) {
+        grid = newGrid;
+        PrintMap();
+    }
+
+    public void GetGridFromHost() {
+        PhotonView photonView = PhotonView.Get(this);
+        photonView.RPC("PUNSendGridFromHost", RpcTarget.All);
     }
 
     /* --- VIRTUAL --- */
