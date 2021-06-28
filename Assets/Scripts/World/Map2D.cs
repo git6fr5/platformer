@@ -121,7 +121,7 @@ public class Map2D : MonoBehaviour
     }
 
     // grid coordinate to tilemap position
-    Vector3Int GridToTileMap(int i, int j) { 
+    public Vector3Int GridToTileMap(int i, int j) { 
         return new Vector3Int(j - horOffset, -(i - vertOffset), 0);
     }
 

@@ -16,7 +16,7 @@ public class Melee : Weapon2D
 
     void StartAttack() {
         // fire the particle
-        particle.Fire();
+        particle?.Fire(); 
         // rotate the weapon
         hand.transform.localEulerAngles = new Vector3(0, 0, -90f);
         // activate the body

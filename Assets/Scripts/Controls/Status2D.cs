@@ -16,7 +16,7 @@ public class Status2D : MonoBehaviour
     public Rigidbody2D body;
     public Collider2D mesh;
     public Collider2D hitbox;
-    public Container2D vision;
+    public Vision vision;
     public Container2D groundCheck;
     // equipment
     [Space(5)][Header("Equipment")]
@@ -86,6 +86,8 @@ public class Status2D : MonoBehaviour
 
     public void HurtFlag() {
         if (justHurt && hurtReset == null) {
+            character.hurtParticle?.Fire();
+            character.SetMaterial(character.hurtMaterial);
             hurtReset = StartCoroutine(IEHurtReset(hurtBuffer));
         }
         healthSlider.value = currHealth;
@@ -140,6 +142,7 @@ public class Status2D : MonoBehaviour
     /* --- COROUTINES --- */
     IEnumerator IEHurtReset(float delay) {
         yield return new WaitForSeconds(delay);
+        character.SetMaterial(character.defaultMaterial);
         justHurt = false;
         hurtReset = null;
         yield return null;

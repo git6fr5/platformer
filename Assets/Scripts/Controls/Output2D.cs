@@ -42,7 +42,7 @@ public class Output2D : MonoBehaviour
         if (doDebug) { print(debugTag + "Dashing"); }
         // adjust the animation
         state.character.SetAnimation(state.character.dashAnimation);
-        if (!state.weapon.point) { state.transform.right = Vector2.right * input.dash; }
+        if (state.weapon != null && !state.weapon.point) { state.transform.right = Vector2.right * input.dash; }
         // add the force
         body.velocity = new Vector2(0, body.velocity.y);
         body.AddForce(new Vector2(input.dash * state.dashForce * state.dashMultiplier, 0));

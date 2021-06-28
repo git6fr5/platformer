@@ -44,7 +44,7 @@ public class Blade : Container2D
         int[] bladePoint = arena.PointToGrid((Vector2)transform.position);
         for (int i = -bladeBreadth; i < bladeBreadth + 1; i++) {
             for (int j = -bladeLength; j < bladeLength + 1; j++) {
-                CutTile(arena, bladePoint[0] + i, bladePoint[1] + j);
+                arena.CutTile(bladePoint[0] + i, bladePoint[1] + j);
             }
         }
         int[] playerPoint = arena.PointToGrid((Vector2)ownHitbox.transform.position);
@@ -52,16 +52,9 @@ public class Blade : Container2D
         {
             for (int j = (int)Mathf.Min(playerPoint[1], bladePoint[1]); j < (int)Mathf.Max(playerPoint[1], bladePoint[1]) + 1; j++)
             {
-                CutTile(arena, i, j);
+                arena.CutTile(i, j);
             }
 
         }
-    }
-
-    void CutTile(Arena arena, int i, int j) {
-        if (!arena.PointInGrid(new int[] { i, j})) { return; }
-        arena.grid[i][j] = (int)Arena.Tiles.empty;
-        arena.CleanCell(i, j);
-        arena.PrintTile(i, j);
     }
 }

@@ -5,6 +5,11 @@ using UnityEngine.Tilemaps;
 
 public class Arena : Map2D
 {
+    /* --- COMPONENTS --- */
+    [Space(5)][Header("Visuals")]
+    public Particle explodeParticle;
+    public Particle growParticle;
+
     /* --- ENUMS --- */
     public enum Tiles {
         empty, center,
@@ -38,7 +43,7 @@ public class Arena : Map2D
     }
 
     /* --- METHODS --- */
-    public void ConstructGrid() { 
+    public void ConstructGrid() {
         for (int i = 0; i < sizeVertical; i++) {
             for (int j = 0; j < grid[i].Length; j++) {
                 grid[i][j] = (int)Tiles.center;
@@ -65,7 +70,7 @@ public class Arena : Map2D
         int code = 1; // starting from one to account for the 0th null tile
         if (grid[i][j] != (int)Tiles.empty) {
             // is top empty
-            if (CellEmpty(i-1, j)) {
+            if (CellEmpty(i - 1, j)) {
                 code += 8;
             }
             // is right empty
@@ -73,7 +78,7 @@ public class Arena : Map2D
                 code += 4;
             }
             // is bottom empty
-            if (CellEmpty(i+1, j)) {
+            if (CellEmpty(i + 1, j)) {
                 code += 2;
             }
             // is left empty (i think this might be backwards but it just started working and im scared to mess with it)
@@ -81,7 +86,7 @@ public class Arena : Map2D
                 code += 1;
             }
             grid[i][j] = code;
-        } 
+        }
     }
 
     // check if the cell at the given coordinates is empty
@@ -93,29 +98,11 @@ public class Arena : Map2D
         return false;
     }
 
-    IEnumerator GrowArena(float delay)
-    {
-        yield return new WaitForSeconds(delay);
-        for (int i = 0; i < grid.Length; i++) {
-            for (int j = 0; j < grid[0].Length; j++) {
-                if (grid[i][j] == (int)Tiles.empty) {
-                    if (Random.Range(0f, 1f)> growThreshold) {
-                        GrowCell(i, j);
-                    }
-                }
-            }
-        }
-        CleanGrid();
-        PrintMap();
-        if (grow) { StartCoroutine(GrowArena(growthInterval)); };
-        yield return null;
-    }
-
     void GrowCell(int i, int j)
     {
         int code = 0;
         // is top empty
-        if (CellEmpty(i-1, j)) {
+        if (CellEmpty(i - 1, j)) {
             code += 8;
         }
         // is right empty
@@ -123,7 +110,7 @@ public class Arena : Map2D
             code += 4;
         }
         // is bottom empty
-        if (CellEmpty(i+1, j)) {
+        if (CellEmpty(i + 1, j)) {
             code += 2;
         }
         // is left empty (i think this might be backwards but it just started working and im scared to mess with it)
@@ -134,6 +121,19 @@ public class Arena : Map2D
         if (code != 15) {
             grid[i][j] = (int)Tiles.center;
         }
+    }
+
+    public void CutTile(int i, int j) {
+        // check if its a valid point
+        if (!PointInGrid(new int[] { i, j})) { return; }
+        if (grid[i][j] == (int)Tiles.empty) { return; }
+        // play the particle
+        Vector2 pos = (Vector2)(Vector3)GridToTileMap(i, j);
+        explodeParticle.FireAdditively(pos);
+        // clear the cell
+        grid[i][j] = (int)Tiles.empty;
+        CleanCell(i, j);
+        PrintTile(i, j);
     }
 
     // reorder the layouts to be able to tell what type they are
@@ -187,5 +187,24 @@ public class Arena : Map2D
                 }
             }
         }
+    }
+
+    /* --- COROUTINES --- */
+    IEnumerator GrowArena(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        for (int i = 0; i < grid.Length; i++) {
+            for (int j = 0; j < grid[0].Length; j++) {
+                if (grid[i][j] == (int)Tiles.empty) {
+                    if (Random.Range(0f, 1f)> growThreshold) {
+                        GrowCell(i, j);
+                    }
+                }
+            }
+        }
+        CleanGrid();
+        PrintMap();
+        if (grow) { StartCoroutine(GrowArena(growthInterval)); };
+        yield return null;
     }
 }

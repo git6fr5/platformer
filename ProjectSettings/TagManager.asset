@@ -4,15 +4,15 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Platform
-  - Traps
   - NPC
-  - Path
   - Particle
   - Character
   - Hitbox
   - Mesh
   - Arena
+  - Boundary
+  - Lava
+  - Platform
   layers:
   - Default
   - TransparentFX

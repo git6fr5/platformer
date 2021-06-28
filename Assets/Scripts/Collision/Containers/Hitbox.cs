@@ -7,11 +7,11 @@ public class Hitbox : Container2D
 {
     /* --- COMPONENTS --- */
     public Status2D state;
+    public Particle hurtParticle;
 
     /* --- METHODS --- */
     public void Hurt(int damage) {
         if (!state.justHurt) {
-            // hurt them
             if (doDebug) { print(debugTag + "Ouch! " + name + " was hurt."); }
             state.currHealth -= damage;
             state.justHurt = true;

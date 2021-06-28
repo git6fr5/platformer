@@ -14,7 +14,9 @@ public class Character : Renderer2D
     public Animation2D rollAnimation;
     public Animation2D hangAnimation;
     // particles
-    [Space(5)][Header("Particles")]
+    [Space(5)][Header("State Particles")]
+    public Particle hurtParticle;
+    [Space(5)][Header("Motion Particles")]
     public Particle quickDashParticle;
     public Particle jumpParticle;
     public Particle doubleJumpParticle;

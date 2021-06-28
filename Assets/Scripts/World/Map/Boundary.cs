@@ -18,13 +18,20 @@ public class Boundary : Map2D
 
     /* --- VARIABLES --- */
     public int width;
+    public bool grow = true;
+    [Range(0.25f, 10f)] public float growthInterval = 10f;
+    [Range(1, 10)] public int growthWidth = 1;
+    [Range(0f, 1f)] public float growThreshold = 0.25f;
     int[] reOrder = { -1, 0 };
 
+    /* --- UNITY --- */
+    
     /* --- OVERRIDE --- */
     public override void Generate()
     {
         ConstructGrid();
         PrintMap();
+        if (grow) { StartCoroutine(GrowBoundary(growthInterval)); }
     }
 
     // organizes the input tiles
@@ -42,14 +49,12 @@ public class Boundary : Map2D
             for (int j = 0; j < sizeHorizontal; j++)
             {
                 if ((i < width || i >= sizeVertical - width) || ((j < width || j >= sizeHorizontal - width))) {
-                    print(i.ToString() + ", " + j.ToString());
+                    //print(i.ToString() + ", " + j.ToString());
                     grid[i][j] = (int)Tiles.center;
                 }
             }
         }
     }
-
-
 
     // reorder the layouts to be able to tell what type they are
     void ReorderLayout(Layout2D tileLayout)
@@ -65,5 +70,35 @@ public class Boundary : Map2D
                 tileLayout.tiles[i] = _tileLayout[reOrder[i]];
             }
         }
+    }
+
+    /* --- COROUTINES --- */
+    IEnumerator GrowBoundary(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        width += growthWidth;
+        for (int i = 0; i < width; i++)
+        {
+            for (int j = 0; j < sizeHorizontal; j++)
+            {
+                if (Random.Range(0f, 1f)> growThreshold) {
+                    grid[i][j] = (int)Tiles.center;
+                    grid[sizeVertical - (i + 1)][j] = (int)Tiles.center;
+                }           
+            }
+        }
+        for (int i = 0; i < sizeVertical; i++)
+        {
+            for (int j = 0; j < width; j++)
+            {
+                if (Random.Range(0f, 1f) > growThreshold) {
+                    grid[i][j] = (int)Tiles.center;
+                    grid[i][sizeHorizontal - (j+1)] = (int)Tiles.center;
+                }
+            }
+        }
+        PrintMap();
+        if (grow) { StartCoroutine(GrowBoundary(growthInterval)); };
+        yield return null;
     }
 }

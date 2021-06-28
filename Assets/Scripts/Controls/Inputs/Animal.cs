@@ -5,30 +5,30 @@ using UnityEngine;
 public class Animal : Input2D
 {
     /* --- COMPONENTS --- */
-    public Container2D vision;
+    public Vision vision;
+    public Arena arena;
 
     /* --- VARIABLES --- */
     public float followRadius = 1.5f;
-    Collider2D target;
+    Hitbox target;
     float buffer = 1f;
 
     /* --- OVERRIDE --- */
     public override void GetInput()
     {
-        if (vision.container.Count == 0) {
+        if (vision.target == null) {
             Stay();
         }
         else {
-            target = vision.container[0];
-            if (Vector2.Distance(target.transform.position, transform.position) > followRadius) {
-                Follow(target);
+            if (Vector2.Distance(vision.target.transform.position, transform.position) > followRadius) {
+                Follow(vision.target);
             }
             else { Stay(); }
         }
     }
 
     /* --- METHODS --- */
-    void Follow(Collider2D target) {
+    void Follow(Hitbox target) {
         dash = Mathf.Sign(target.transform.position.x - transform.position.x);
         if (target.transform.position.y > transform.position.y + buffer){
             jump = true;
@@ -44,5 +44,12 @@ public class Animal : Input2D
         dash = 0;
         jump = false;
         slam = false;
+    }
+
+    void Path() {
+
+        int[] targetPoint = arena.PointToGrid(vision.target.transform.position);
+        int[] currPoint = arena.PointToGrid(transform.position);
+
     }
 }

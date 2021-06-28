@@ -6,6 +6,7 @@ public class Development : MonoBehaviour
 {
     /* --- ENUMS --- */
     public enum Physics { Earth, Mars }
+    public enum Screen { Follow, Zoomed }
 
     /* --- COMPONENTS --- */
     public Status2D[] players;
@@ -14,37 +15,26 @@ public class Development : MonoBehaviour
     public Background background;
 
     /* --- VARIABLES --- */
+    public bool developing = true;
     public bool buildMode = true;
     public Physics physics = Physics.Earth;
+    public Screen screenMode = Screen.Zoomed;
 
     /* --- METHODS --- */
     void Start() {
-        if (buildMode) { BuildMode(); }
     }
 
-    void Update() { 
-        if (Input.GetKeyDown("b")) {
-            buildMode = !buildMode;
-            BuildMode();
-        }
-        if (buildMode) {
-            BuildModeCommands();
-        }
+    void Update() {
+        if (!developing) { return; }
+        DeveloperCommands();
+        if (buildMode) { BuildModeCommands(); }
         PhysicsSettings();
     }
 
     /* --- METHODS --- */
-    void BuildMode() {
-        if (buildMode) {
-            //Time.timeScale = 0f;
-            cameraFollow.enabled = false;
-            Camera.main.orthographicSize = 25f;
-            Camera.main.transform.position = new Vector3(0, 0, Camera.main.transform.position.z);
-        }
-        else {
-            Time.timeScale = 1f;
-            cameraFollow.enabled = true;
-            Camera.main.orthographicSize = 7f;
+    void DeveloperCommands() { 
+        if (Input.GetKeyDown("b")) {
+            buildMode = !buildMode;
         }
     }
 
