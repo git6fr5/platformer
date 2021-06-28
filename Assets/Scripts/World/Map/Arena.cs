@@ -7,8 +7,6 @@ using Photon.Pun;
 public class Arena : Map2D
 {
     /* --- COMPONENTS --- */
-    public string message;
-
     [Space(5)][Header("Visuals")]
     public Particle explodeParticle;
     public Particle growParticle;
@@ -34,12 +32,12 @@ public class Arena : Map2D
     /* --- PHOTON --- */
     [PunRPC]
     void PUNCutTile(int i, int j) {
-        CutTile(i, j);
+        CutTile(i, j, false);
     }
 
     [PunRPC]
     void PUNGrowCell(int i, int j) {
-        GrowCell(i, j);
+        GrowCell(i, j, false);
     }
 
 
@@ -125,7 +123,7 @@ public class Arena : Map2D
         }
     }
 
-    void GrowCell(int i, int j)
+    void GrowCell(int i, int j, bool sync = true)
     {
         int code = 0;
         // is top empty
@@ -149,11 +147,13 @@ public class Arena : Map2D
             grid[i][j] = (int)Tiles.center;
         }
         // sync with the network
-        PhotonView photonView = PhotonView.Get(this);
-        photonView.RPC("PUNGrowCell", RpcTarget.All, i, j);
+        if (sync) {
+            PhotonView photonView = PhotonView.Get(this);
+            photonView.RPC("PUNGrowCell", RpcTarget.All, i, j);
+        }
     }
 
-    public void CutTile(int i, int j) {
+    public void CutTile(int i, int j, bool sync = true) {
         // check if its a valid point
         if (!PointInGrid(new int[] { i, j})) { return; }
         if (grid[i][j] == (int)Tiles.empty) { return; }
@@ -165,8 +165,10 @@ public class Arena : Map2D
         CleanCell(i, j);
         PrintTile(i, j);
         // sync with the network
-        PhotonView photonView = PhotonView.Get(this);
-        photonView.RPC("PUNCutTile", RpcTarget.All, i, j);
+        if (sync) {
+            PhotonView photonView = PhotonView.Get(this);
+            photonView.RPC("PUNCutTile", RpcTarget.All, i, j);
+        }     
     }
 
     // reorder the layouts to be able to tell what type they are

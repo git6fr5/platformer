@@ -6,16 +6,16 @@ using UnityEngine.Tilemaps;
 using UnityEngine.Events;
 using Photon.Pun;
 
-public class Map2D : MonoBehaviour
+public class Map2D : MonoBehaviour, IPunObservable
 {
 
     /* --- COMPONENTS --- */
-    [Space(5)][Header("Networking")]
+    [Space(5)] [Header("Networking")]
     public PhotonView photonView;
-    [Space(5)][Header("Tilemap")]
+    [Space(5)] [Header("Tilemap")]
     public Tilemap tilemap;
     // layouts
-    [Space(5)][Header("Tiles")]
+    [Space(5)] [Header("Tiles")]
     public Layout2D[] tileLayouts;
     public float[] tileLayoutDistribution;
     private float distributionSum = 0f;
@@ -29,7 +29,7 @@ public class Map2D : MonoBehaviour
     [Range(16, 128)] public int sizeVertical = 64;
     [Range(16, 128)] public int sizeHorizontal = 64;
     // brush size
-    [Space(5)][Header("Brush Size")]
+    [Space(5)] [Header("Brush Size")]
     [Range(0.05f, 0.8f)] public float sizeMin = 0.2f;
     [Range(0.05f, 0.8f)] public float sizeMax = 0.2f;
     // offset
@@ -45,6 +45,10 @@ public class Map2D : MonoBehaviour
     }
 
     /* --- PHOTON --- */
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info) { 
+        // placeholder
+    }
+
     [PunRPC]
     public void PUNSendGridFromHost() {
         PhotonView photonView = PhotonView.Get(this);

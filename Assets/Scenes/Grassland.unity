@@ -2439,6 +2439,10 @@ PrefabInstance:
       propertyPath: sceneViewId
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 3002549512501170549, guid: 40f00aa641a108f4e8fd05d1e1fdb686, type: 3}
+      propertyPath: Synchronization
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 3002549512501170551, guid: 40f00aa641a108f4e8fd05d1e1fdb686, type: 3}
       propertyPath: m_Name
       value: Player
