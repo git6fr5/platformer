@@ -29,7 +29,7 @@ Material:
     - _OutlineWidth: 0
     - _Vertical: 0
     - _WaveAmplitude: 0.02
-    - _WaveDensity: 5
+    - _WaveDensity: 1
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 0}
     - _OutlineColor: {r: 1, g: 1, b: 1, a: 1}

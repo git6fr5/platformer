@@ -1,9 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
 public class Player : Input2D
 {
+    /* --- COMPONENTS --- */
+    public PhotonView photonView;
+
     /* --- VARIABLES --- */
     public KeyCode rightDashKey = KeyCode.D;
     public KeyCode leftDashKey = KeyCode.A;
@@ -14,6 +18,7 @@ public class Player : Input2D
 
     /* --- OVERRIDE --- */
     public override void GetInput() {
+        if (!photonView.IsMine) { return; }
         // dash 
         if (Input.GetKey(rightDashKey)) { dash = 1; }
         else if (Input.GetKey(leftDashKey)) { dash = -1; }
