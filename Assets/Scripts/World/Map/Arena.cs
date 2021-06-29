@@ -147,7 +147,7 @@ public class Arena : Map2D
             grid[i][j] = (int)Tiles.center;
         }
         // sync with the network
-        if (sync) {
+        if (sync && Development.sync) {
             PhotonView photonView = PhotonView.Get(this);
             photonView.RPC("PUNGrowCell", RpcTarget.All, i, j);
         }
@@ -165,7 +165,7 @@ public class Arena : Map2D
         CleanCell(i, j);
         PrintTile(i, j);
         // sync with the network
-        if (sync) {
+        if (sync && Development.sync) {
             PhotonView photonView = PhotonView.Get(this);
             photonView.RPC("PUNCutTile", RpcTarget.All, i, j);
         }     

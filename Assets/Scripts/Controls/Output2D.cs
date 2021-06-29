@@ -26,6 +26,7 @@ public class Output2D : MonoBehaviour
         //Reset();
         // dashing
         if (!state.justDashed && input.dash != 0) { Dash(); }
+        else if (input.dash == 0) { state.dashing = false; }
         // jumping
         if (state.onGround && !state.justJumped && input.jump) { Jump(); }
         // slam

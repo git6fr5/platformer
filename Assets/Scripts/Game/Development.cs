@@ -10,28 +10,40 @@ public class Development : MonoBehaviour
 
     /* --- COMPONENTS --- */
     public Status2D[] players;
+    public RoomManager roomManager;
     public Follow cameraFollow;
     public Arena arena;
     public Background background;
+    public Skybox2D skybox;
 
     /* --- VARIABLES --- */
+    public static bool sync = false;
     public bool developing = true;
     public bool buildMode = true;
     public Physics physics = Physics.Earth;
     public Screen screenMode = Screen.Zoomed;
 
     /* --- METHODS --- */
-    void Start() {
+    void Awake() {
+        Develop();
     }
 
     void Update() {
         if (!developing) { return; }
         DeveloperCommands();
         if (buildMode) { BuildModeCommands(); }
+        EnvironmentSettings();
         PhysicsSettings();
     }
 
     /* --- METHODS --- */
+    void Develop() {
+        for (int i = 0; i < players.Length ; i++) {
+            players[i].gameObject.SetActive(true);
+        }
+        roomManager.gameObject.SetActive(false);
+    }
+
     void DeveloperCommands() { 
         if (Input.GetKeyDown("b")) {
             buildMode = !buildMode;
@@ -82,5 +94,11 @@ public class Development : MonoBehaviour
             }
         }
         
+    }
+
+    void EnvironmentSettings() { 
+        if (Input.GetKeyDown("s")) {
+            skybox.currSetting = (Skybox2D.Setting)( ( (int)(skybox.currSetting) + 1 ) % (int)Skybox2D.Setting.numSettings );
+        }
     }
 }

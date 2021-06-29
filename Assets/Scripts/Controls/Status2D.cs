@@ -112,10 +112,10 @@ public class Status2D : MonoBehaviour
             dashMultiplier = quickDashMultiplier;
             quickDashReset = StartCoroutine(IEQuickDashReset(quickDashBuffer)); 
         }
-        if (Mathf.Abs(body.velocity.x) > 0.05f && character.currAnimation != character.dashAnimation) {
+        if (dashing && character.currAnimation != character.dashAnimation) {
             character.SetAnimation(character.dashAnimation);
         }
-        else {
+        else if (!dashing) {
             character.SetAnimation(null);
         }
     }
