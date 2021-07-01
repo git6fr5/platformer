@@ -10,12 +10,17 @@ public class Input2D : MonoBehaviour
     protected string debugTag = "[Input2D]: ";
 
     /* --- VARIABLES --- */
+    // horizontal
     public float dash;
+    // vertical
     public bool jump;
     public bool slam;
+    // action
     public bool attack;
     public bool attack2;
     public Vector2 targetPoint;
+    // inventory
+    public bool bagpack;
 
     /* --- UNITY --- */
     void Start() { 

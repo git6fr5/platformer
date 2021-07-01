@@ -40,21 +40,8 @@ public class Blade : Container2D
         hitbox.Knockback(weapon.knockbackForce, hitbox.transform.position - weapon.hand.transform.position);
     }
 
-    public virtual void Cut(Arena arena) { 
-        int[] bladePoint = arena.PointToGrid((Vector2)transform.position);
-        for (int i = -bladeBreadth; i < bladeBreadth + 1; i++) {
-            for (int j = -bladeLength; j < bladeLength + 1; j++) {
-                arena.CutTile(bladePoint[0] + i, bladePoint[1] + j);
-            }
-        }
-        int[] playerPoint = arena.PointToGrid((Vector2)ownHitbox.transform.position);
-        for (int i = (int)Mathf.Min(playerPoint[0], bladePoint[0]); i < (int)Mathf.Max(playerPoint[0], bladePoint[0]) + 1; i++)
-        {
-            for (int j = (int)Mathf.Min(playerPoint[1], bladePoint[1]); j < (int)Mathf.Max(playerPoint[1], bladePoint[1]) + 1; j++)
-            {
-                arena.CutTile(i, j);
-            }
-
-        }
+    public virtual void Cut(Arena arena) {
+        print("Cutting arena");
+        arena.CutGrid((Vector2)transform.position, bladeBreadth, bladeLength);
     }
 }

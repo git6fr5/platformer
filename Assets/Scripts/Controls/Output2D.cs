@@ -12,7 +12,6 @@ public class Output2D : MonoBehaviour
     /* --- COMPONENTS --- */
     public Input2D input;
     public Status2D state;
-    public Rigidbody2D body;
 
     /* --- VARIABLES --- */
     public bool damp = true;
@@ -22,8 +21,11 @@ public class Output2D : MonoBehaviour
     }
 
     void Update() {
-        // reset
-        //Reset();
+        ProcessInput();
+    }
+
+    /* --- METHODS --- */
+    void ProcessInput() {
         // dashing
         if (!state.justDashed && input.dash != 0) { Dash(); }
         else if (input.dash == 0) { state.dashing = false; }
@@ -34,18 +36,20 @@ public class Output2D : MonoBehaviour
         // attacking
         if (state.weapon != null && !state.weapon.attacking && input.attack) { Attack(); }
         if (state.secondaryWeapon != null && !state.secondaryWeapon.attacking && input.attack2) { SecondaryAttack(); }
+        // inventory
+        if (state.bagpack != null && state.bagpack.gameObject.activeSelf != input.bagpack) { Bagpack(); }
         // misc
         if (damp) { Damp(); }
     }
 
-    /* --- METHODS --- */
+    /* --- ACTIONS --- */
     void Dash() {    
         if (doDebug) { print(debugTag + "Dashing"); }
         // adjust the animation
         if (state.weapon != null && !state.weapon.point) { state.transform.right = Vector2.right * input.dash; }
         // add the force
-        body.velocity = new Vector2(0, body.velocity.y);
-        body.AddForce(new Vector2(input.dash * state.dashForce * state.dashMultiplier, 0));
+        state.body.velocity = new Vector2(0, state.body.velocity.y);
+        state.body.AddForce(new Vector2(input.dash * state.dashForce * state.dashMultiplier, 0));
         state.justDashed = true;
     }
 
@@ -54,8 +58,8 @@ public class Output2D : MonoBehaviour
         // adjust the animation
         state.character.jumpParticle?.Fire();
         // add the force
-        body.velocity = new Vector2(body.velocity.x, 0);
-        body.AddForce(new Vector2(0, state.jumpForce));
+        state.body.velocity = new Vector2(state.body.velocity.x, 0);
+        state.body.AddForce(new Vector2(0, state.jumpForce));
         state.justJumped = true;
     }
 
@@ -64,7 +68,7 @@ public class Output2D : MonoBehaviour
         // adjust the animation
         state.character.crouchParticle?.Fire();
         // add the force
-        body.AddForce(new Vector2(0, -state.slamForce));
+        state.body.AddForce(new Vector2(0, -state.slamForce));
     }
 
     void Attack() {
@@ -78,19 +82,14 @@ public class Output2D : MonoBehaviour
     }
 
     void Damp() { 
-        body.velocity = new Vector2(body.velocity.x * 0.999f, body.velocity.y);
-        if (body.velocity.y > 20f){
-            body.velocity = new Vector2(body.velocity.x, 10f);
+        state.body.velocity = new Vector2(state.body.velocity.x * 0.999f, state.body.velocity.y);
+        if (state.body.velocity.y > 20f){
+            state.body.velocity = new Vector2(state.body.velocity.x, 10f);
         }
     }
 
-    void Reset() {
-        state.character.SetAnimation(null);
-        state.character.SetMaterial(null);
-        if (state.weapon.point) { Point(); }
-    }
-
-    void Point() { 
-        // point
+    /* --- INVENTORY --- */
+    void Bagpack() {
+        state.bagpack.gameObject.SetActive(input.bagpack);
     }
 }

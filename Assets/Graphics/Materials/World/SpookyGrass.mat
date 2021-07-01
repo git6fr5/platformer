@@ -28,7 +28,7 @@ Material:
     - _Horizontal: 1
     - _OutlineWidth: 0
     - _Vertical: 0
-    - _WaveAmplitude: 0.02
+    - _WaveAmplitude: 0.005
     - _WaveDensity: 1
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 0}

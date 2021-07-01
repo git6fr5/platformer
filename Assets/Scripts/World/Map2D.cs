@@ -4,14 +4,11 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Tilemaps;
 using UnityEngine.Events;
-using Photon.Pun;
 
-public class Map2D : MonoBehaviour, IPunObservable
+public class Map2D : MonoBehaviour
 {
 
     /* --- COMPONENTS --- */
-    [Space(5)] [Header("Networking")]
-    public PhotonView photonView;
     [Space(5)] [Header("Tilemap")]
     public Tilemap tilemap;
     // layouts
@@ -22,6 +19,7 @@ public class Map2D : MonoBehaviour, IPunObservable
 
     /* --- VARIABLES --- */
     [Space(5)] [Header("Auto Generate")]
+    public Vector2Int id;
     public bool generate = true;
     // arena dimensions 
     [Space(5)] [Header("Arena Dimensions")]
@@ -39,33 +37,7 @@ public class Map2D : MonoBehaviour, IPunObservable
     /* --- UNITY --- */
     void Awake() {
         Initialize();
-        if (photonView.IsMine) { generate = true; }
-        else { generate = false; }
         if (generate) { Generate(); }
-    }
-
-    /* --- PHOTON --- */
-    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info) { 
-        // placeholder
-    }
-
-    [PunRPC]
-    public void PUNSendGridFromHost() {
-        PhotonView photonView = PhotonView.Get(this);
-        if (photonView.IsMine) {
-            photonView.RPC("PUNSendGrid", RpcTarget.All, grid);
-        }
-    }
-
-    [PunRPC] 
-    public void PUNSendGrid(int[][] newGrid) {
-        grid = newGrid;
-        PrintMap();
-    }
-
-    public void GetGridFromHost() {
-        PhotonView photonView = PhotonView.Get(this);
-        photonView.RPC("PUNSendGridFromHost", RpcTarget.All);
     }
 
     /* --- VIRTUAL --- */
@@ -98,8 +70,8 @@ public class Map2D : MonoBehaviour, IPunObservable
 
     // initialize a tilemap
     void SetMap() {
-        horOffset = (int)sizeHorizontal / 2;
-        vertOffset = (int)sizeVertical / 2;
+        horOffset = -(int)sizeHorizontal * id.x;
+        vertOffset = (int)sizeVertical * id.y;
         PrintMap();
     }
 
@@ -133,14 +105,19 @@ public class Map2D : MonoBehaviour, IPunObservable
 
     // a given point to grid coordinates 
     public int[] PointToGrid(Vector2 point) {
-        int gridY = grid.Length - (int)(point.y + vertOffset);
-        int gridX = (int)(point.x + horOffset);
-        return new int[] { gridY, gridX };
+        int i = (int)(-point.y + vertOffset);
+        int j = (int)(point.x + horOffset);
+        print(i + ", " + j);
+        return new int[] { i, j };
     }
 
     // checks if a coordinate is in the grid
     public bool PointInGrid(int[] point) {
-        return (point[1] < sizeHorizontal && point[1] >= 0 && point[0] < sizeVertical && point[0] >= 0);
+        bool isInGrid = (point[1] < sizeHorizontal && point[1] >= 0 && point[0] < sizeVertical && point[0] >= 0);
+        if (!isInGrid){
+            print(point[0] + ", " + point[1] + " was not in the grid");
+        }
+        return isInGrid;
     }
 
     // mouse click to anchor point
@@ -151,7 +128,7 @@ public class Map2D : MonoBehaviour, IPunObservable
 
     // grid coordinate to tilemap position
     public Vector3Int GridToTileMap(int i, int j) { 
-        return new Vector3Int(j - horOffset, -(i - vertOffset), 0);
+        return new Vector3Int(j - horOffset, -(i - vertOffset + 1), 0);
     }
 
     // random anchor snapped to cardinal direction

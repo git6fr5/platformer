@@ -9,7 +9,7 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: Path
   m_Shader: {fileID: 4800000, guid: df5e65b291551e444946980e4d66ccbb, type: 3}
-  m_ShaderKeywords: 
+  m_ShaderKeywords: ETC1_EXTERNAL_ALPHA
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -30,7 +30,7 @@ Material:
     m_Floats:
     - _BlurRadiusInner: 0.5
     - _BlurRadiusOuter: 0.22
-    - _FlowSpeed: 1
+    - _FlowSpeed: 0
     - _FlowSpeedHorizontal: 0
     - _FlowSpeedVertical: 0
     - _Horizontal: 1
@@ -39,7 +39,7 @@ Material:
     - _NoiseOffset: -0.69
     - _OuterBlurIntensity: 0.36
     - _Vertical: 0
-    - _WaveAmplitude: 1
+    - _WaveAmplitude: 0.05
     - _WaveDensity: 1
     m_Colors: []
   m_BuildTextureStacks: []

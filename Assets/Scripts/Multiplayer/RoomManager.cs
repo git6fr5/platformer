@@ -13,7 +13,7 @@ public class RoomManager : MonoBehaviour
     void Start() {
         print("Player has joined");
         print(PhotonNetwork.LocalPlayer.NickName);
-        arena.GetGridFromHost();
+        //arena.GetGridFromHost();
         PhotonNetwork.Instantiate(playerPrefab.name, 1.5f*Random.insideUnitCircle, Quaternion.identity);
     }
 }

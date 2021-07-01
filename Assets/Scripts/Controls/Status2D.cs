@@ -10,6 +10,8 @@ public class Status2D : MonoBehaviour
     // rendering
     [Space(5)][Header("Renderer")]
     public Character character;
+    public Camera playerCam;
+    public Skybox2D skybox;
     public Slider healthSlider;
     // collision
     [Space(5)][Header("Collision")]
@@ -22,6 +24,9 @@ public class Status2D : MonoBehaviour
     [Space(5)][Header("Equipment")]
     public Weapon2D weapon;
     public Weapon2D secondaryWeapon;
+    // inventory
+    [Space(5)][Header("Bagpack")]
+    public InventoryUI bagpack;
 
     /* --- VARIABLES --- */
     // health
@@ -69,6 +74,7 @@ public class Status2D : MonoBehaviour
     /* --- UNITY --- */
     void Start() {
         SetHealth();
+        SetCamera();
     }
 
     void Update() {
@@ -77,11 +83,33 @@ public class Status2D : MonoBehaviour
         HurtFlag();
         KnockFlag();
         GroundFlag();
+        SettingFlag();
     }
 
     /* --- METHODS --- */
     void SetHealth() {
         healthSlider.maxValue = maxHealth;
+    }
+
+    void SetCamera() {
+        if (playerCam != null) {
+            playerCam.transform.parent = null;
+        }
+    }
+
+    void SettingFlag() {
+        if (playerCam == null || skybox == null) { return; }
+        if (playerCam.transform.position.y < GameRules.groundHeight) {
+            skybox.currSetting = Skybox2D.Setting.underground;
+        }
+        else { 
+            if (GameRules.isDay) {
+                skybox.currSetting = Skybox2D.Setting.day;
+            }
+            else {
+                skybox.currSetting = Skybox2D.Setting.night;
+            }
+        }
     }
 
     public void HurtFlag() {

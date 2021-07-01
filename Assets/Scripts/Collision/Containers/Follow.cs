@@ -18,9 +18,9 @@ public class Follow : Container2D
 
     /* --- UNITY --- */
     void Update() {
-        Vector3 pos = follow.transform.position - (Vector3)bound.offset;
-        transform.position = new Vector3(pos.x, pos.y, transform.position.z);
-        //Move();
+        //Vector3 pos = follow.transform.position - (Vector3)bound.offset;
+        //transform.position = new Vector3(pos.x, pos.y, transform.position.z);
+        Move();
     }
 
     void Move() {

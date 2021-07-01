@@ -13,6 +13,8 @@ TagManager:
   - Boundary
   - Lava
   - Platform
+  - Collectible
+  - EventSystem
   layers:
   - Default
   - TransparentFX

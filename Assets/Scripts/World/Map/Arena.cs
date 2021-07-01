@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
-using Photon.Pun;
 
 public class Arena : Map2D
 {
@@ -28,18 +27,6 @@ public class Arena : Map2D
     [Range(0.25f, 5f)] public float growthInterval = 1f;
     [Range(0.05f, 0.999f)] public float growThreshold = 0.95f;
     int[] reOrder = new int[] { -1, 7, 8, 12, 13, 6, 10, 11, 15, 2, 3, 17, 18, 1, 0, 16, 19, 0, 0, 0, 0, 0, 0, 0, 0 };
-
-    /* --- PHOTON --- */
-    [PunRPC]
-    void PUNCutTile(int i, int j) {
-        CutTile(i, j, false);
-    }
-
-    [PunRPC]
-    void PUNGrowCell(int i, int j) {
-        GrowCell(i, j, false);
-    }
-
 
     /* --- OVERRIDE --- */
     public override void Generate() {
@@ -146,29 +133,29 @@ public class Arena : Map2D
         if (code != 15) {
             grid[i][j] = (int)Tiles.center;
         }
-        // sync with the network
-        if (sync && Development.sync) {
-            PhotonView photonView = PhotonView.Get(this);
-            photonView.RPC("PUNGrowCell", RpcTarget.All, i, j);
+    }
+
+    public void CutGrid(Vector2 origin, int breadth, int length) { 
+        int[] originPoint = PointToGrid(origin);
+        print(originPoint[0] + ", " + originPoint[1] + " was the origin");
+        for (int i = -breadth; i < breadth + 1; i++) {
+            for (int j = -length; j < length + 1; j++) {
+                CutTile(originPoint[0] + i, originPoint[1] + j);
+            }
         }
+        CleanGrid();
+        PrintMap();
     }
 
     public void CutTile(int i, int j, bool sync = true) {
         // check if its a valid point
-        if (!PointInGrid(new int[] { i, j})) { return; }
+        if (!PointInGrid(new int[] { i, j })) { return; }
         if (grid[i][j] == (int)Tiles.empty) { return; }
         // play the particle
         Vector2 pos = (Vector2)(Vector3)GridToTileMap(i, j);
         explodeParticle.FireAdditively(pos);
         // clear the cell
         grid[i][j] = (int)Tiles.empty;
-        CleanCell(i, j);
-        PrintTile(i, j);
-        // sync with the network
-        if (sync && Development.sync) {
-            PhotonView photonView = PhotonView.Get(this);
-            photonView.RPC("PUNCutTile", RpcTarget.All, i, j);
-        }     
     }
 
     // reorder the layouts to be able to tell what type they are
@@ -228,9 +215,7 @@ public class Arena : Map2D
     IEnumerator IEGrowArena(float delay)
     {
         yield return new WaitForSeconds(delay);
-        if (photonView.IsMine) {
-            GrowArena();
-        }
+        GrowArena();
         CleanGrid();
         PrintMap();
         if (grow) { StartCoroutine(IEGrowArena(growthInterval)); };

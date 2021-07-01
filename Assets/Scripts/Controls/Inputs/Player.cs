@@ -5,9 +5,6 @@ using Photon.Pun;
 
 public class Player : Input2D
 {
-    /* --- COMPONENTS --- */
-    public PhotonView photonView;
-
     /* --- VARIABLES --- */
     public KeyCode rightDashKey = KeyCode.D;
     public KeyCode leftDashKey = KeyCode.A;
@@ -15,10 +12,10 @@ public class Player : Input2D
     public KeyCode slamKey = KeyCode.S;
     public int attackButton = 0;
     public int secondaryAttackButton = 1;
+    public KeyCode toggleBagpackKey = KeyCode.E;
 
     /* --- OVERRIDE --- */
     public override void GetInput() {
-        if (!photonView.IsMine) { return; }
         // dash 
         if (Input.GetKey(rightDashKey)) { dash = 1; }
         else if (Input.GetKey(leftDashKey)) { dash = -1; }
@@ -30,14 +27,16 @@ public class Player : Input2D
         if (Input.GetKey(slamKey)) { slam = true; }
         else { slam = false; }
         // attacking
-        if (Input.GetMouseButtonDown(attackButton)) { 
-            attack = true; 
+        if (Input.GetMouseButtonDown(attackButton)) {
+            attack = true;
         }
         else { attack = false; }
-        if (Input.GetMouseButtonDown(secondaryAttackButton)) { 
-            attack2 = true; 
+        if (Input.GetMouseButtonDown(secondaryAttackButton)) {
+            attack2 = true;
         }
         else { attack2 = false; }
         targetPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        // bagpack
+        if (Input.GetKeyDown(toggleBagpackKey)) { bagpack = !bagpack; }
     }
 }
